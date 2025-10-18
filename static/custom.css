@@ -123,6 +123,11 @@ body.page-bg-present .container{
  @media (max-width:720px){
    .container{padding:20px 12px;margin:22px 12px}
    .navbar{font-size:1.2em;padding:14px 0}
+  .hero { flex-direction: column !important; gap: 18px !important; }
+  .hero .hero-media { width: 100% !important; height: auto !important; min-height: 180px; margin: 0 auto 12px auto; }
+  .hero .cta-row { flex-direction: column !important; gap: 14px !important; align-items: stretch !important; max-width: 340px; margin: 0 auto; }
+  .hero .cta-row a, .cta-row a, .accent-btn, button.accent-btn, a.accent-btn { display: block !important; width: 100% !important; max-width: 100% !important; margin-bottom: 0 !important; font-size: 1.1em; padding: 14px 0; border-radius: 7px; }
+  .panel { min-width: 0 !important; width: 100% !important; margin: 0 0 18px 0 !important; box-sizing: border-box; }
  }
 
  /* Sticky header and search */
