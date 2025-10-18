@@ -389,15 +389,17 @@ button:focus, .btn:focus, input[type=submit]:focus{outline:3px solid rgba(255,25
 }
 
 /* Strong overrides (force theme change) */
-.site-header .topbar {
-  /* keep topbar subtle and consistent with theme */
-  background: rgba(0,0,0,0.55);
-  color: #e6eef8;
-  font-weight: 600;
+
+/* Strong overrides (force theme change) */
+.site-header, .site-header .header-main, .header-main, .navbar, header {
+  background: #b8860b !important; /* dark yellow */
+  color: #fff !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
 }
-.site-header .header-main {
-  background: linear-gradient(90deg,#071428,#081826);
-  color: #e6eef8;
+.site-header .topbar {
+  background: #a97c0a !important;
+  color: #fff !important;
+  font-weight: 600;
 }
 
 /* Improvements for mobile / touch devices */
