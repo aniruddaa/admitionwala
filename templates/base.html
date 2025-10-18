@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load static %}
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdmitionWala</title>
+  <meta name="description" content="Find colleges, courses and career guidance across India. Search, compare and apply with one form at AdmitionWala.">
+  <!-- Default social meta - pages may override the page_head block in child templates -->
+  <meta property="og:site_name" content="AdmitionWala">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AdmitionWala">
+  <meta property="og:description" content="Find colleges, courses and career guidance across India.">
+  <meta property="og:image" content="{% static 'college_logo.svg' %}">
+  <meta property="og:url" content="{{ request.build_absolute_uri }}">
+  <meta name="twitter:title" content="AdmitionWala - Find colleges & apply">
+  <link rel="canonical" href="{{ request.build_absolute_uri }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:site" content="@admitionwala">
+  {% block page_head %}{% endblock %}
+  <link rel="stylesheet" href="{% static 'custom.css' %}">
+  <style>
+      :root { --page-bg-url: url('{% static "images/background.jpeg" %}'); }
+      {% if page_background_url %}
+        :root { --page-bg-url: url('{{ page_background_url }}'); }
+      {% endif %}
+      html, body {
+        background: var(--page-bg-url) no-repeat center center fixed !important;
+        background-size: cover !important;
+        margin: 0 !important;
+        height: 100%;
+      }
+    </style>
+</head>
+<body class="{% if page_background_url %}page-bg-present{% endif %}">
+  <div id="react-root"></div>
+  <!-- React will render the header and background animations into #react-root -->
+
+  <div class="container animated fadeInUp">
+    {% block content %}{% endblock %}
+  </div>
+  <script>
+    // Sticky header and mobile menu toggle
+    (function(){
+      var header = document.querySelector('.site-header');
+      var hamb = document.querySelector('.hamburger');
+      var nav = document.querySelector('.main-nav');
+      window.addEventListener('scroll', function(){
+        if(window.scrollY > 60) header.classList.add('sticky'); else header.classList.remove('sticky');
+      });
+      if(hamb){ hamb.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); }); }
+      // close menu on nav item click (mobile)
+      nav && nav.addEventListener('click', function(e){ if(e.target.tagName==='A' && document.body.classList.contains('menu-open')) document.body.classList.remove('menu-open'); });
+    })();
+  </script>
+  <script id="dj-data" type="application/json">
+    {
+      "user_authenticated": {{ request.user.is_authenticated|yesno:'true,false' }},
+      "page_background_url": {% if page_background_url %}"{{ page_background_url|escapejs }}"{% else %}null{% endif %},
+      "static_college_logo": "{% static 'college_logo.svg' %}"
+    }
+  </script>
+  <script>
+    try{
+      window.__DJANGO__ = JSON.parse(document.getElementById('dj-data').textContent);
+    }catch(e){ window.__DJANGO__ = { user_authenticated: false, page_background_url: null, static_college_logo: '/static/college_logo.svg' }; }
+  </script>
+  <!-- React (via CDN) and our small app to render header/background -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="{% static 'js/react_app.js' %}"></script>
+  <div class="footer">&copy; 2025 AdmitionWala.</div>
+</body>
+</html>

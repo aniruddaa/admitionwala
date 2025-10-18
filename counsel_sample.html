@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdmitionWala</title>
+  <link rel="stylesheet" href="/static/custom.css">
+</head>
+<body>
+  <div class="bg-animations" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="topbar">
+      <div class="top-left">1800-572-9877 &nbsp; hello@admitionwala.com</div>
+      <div class="top-right">We're on your favourite socials! &nbsp;
+      
+        <a href="/login/">Login</a>
+      
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="logo"><img src="/static/college_logo.svg" alt="AdmitionWala logo"/></div>
+      <div class="header-right">
+      <form action="/colleges/" method="get" class="header-search">
+        <input name="q" type="search" placeholder="Search colleges, courses or cities" aria-label="Search" />
+        <button type="submit">Explore</button>
+        </form>
+        <nav class="main-nav">
+        <ul>
+          <li><a href="/colleges/">Explore Colleges</a></li>
+          <li>Exams</li>
+          <li>Courses</li>
+          <li>Careers</li>
+          <li>Latest</li>
+          <li><a href="/admition-counseling/">Counseling</a></li>
+          <li><a href="/apply/">Apply</a></li>
+        </ul>
+        </nav>
+        <button class="hamburger" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container animated fadeInUp">
+    
+<div id="user-ask-section" style="max-width:600px;margin:32px auto 0 auto;text-align:center;">
+  <h3 class="accent-text">Ask AdmitionWala Robo (in Marathi)</h3>
+  <input id="user-question-input" type="text" placeholder="तुमचा प्रश्न विचारा..." class="input-accent" style="width:70%;margin-bottom:10px;" autocomplete="off" />
+  <div id="robo-answer" class="accent-text" style="margin-top:18px;font-weight:500;"></div>
+</div>
+<div class="animated bounce" style="text-align:center;margin-bottom:24px;">
+  <h2 class="accent-text" style="font-size:2em;margin-bottom:6px;">AdmitionWala Robo</h2>
+  <div id="ai-marathi-greeting" style="color:#555;font-size:1.1em;">नमस्कार, आपले स्वागत आहे! मी AdmitionWala Robo आहे. कृपया आपली माहिती द्या.</div>
+  <button id="speak-greeting-btn" style="margin-top:10px;background:#2e7d32;color:white;padding:7px 18px;border:none;border-radius:6px;font-size:1em;font-weight:600;cursor:pointer;">Speak</button>
+</div>
+<div id="ai-marathi-form" class="panel" style="max-width:420px;margin:32px auto 0 auto;">
+  <div id="ai-marathi-question" style="font-weight:500;margin-bottom:12px;" class="accent-text"></div>
+  <form id="ai-marathi-form-el" method="POST" style="margin:0;">
+    <input type="hidden" name="csrfmiddlewaretoken" value="kCmA7kW5h5sORMCregmlOv9mhmaNXCySh0uPOixseKPq5Zh8S9pca0oyFecWnWSR">
+    <input id="ai-marathi-input" name="ai-marathi-input" type="text" class="input-accent" style="width:100%;margin-bottom:10px;" autofocus />
+    <button id="ai-marathi-next" type="button" class="accent-btn full-width">पुढे</button>
+  </form>
+  <div id="ai-marathi-response" class="accent-text" style="margin-top:18px;font-weight:500;"></div>
+</div>
+
+<script>
+// Simple rule-based Marathi answers (expand as needed)
+function getMarathiAnswer(q) {
+  q = q.trim();
+  // Greetings
+  if (q.includes('नमस्कार') || q.includes('hello') || q.includes('हाय') || q.includes('hi') || q.includes('स्वागत'))
+    return 'नमस्कार! मी AdmitionWala Robo आहे. तुम्ही मला कोणताही प्रश्न विचारू शकता.';
+  // Courses
+  if (q.includes('कोर्स') || q.includes('course')) return 'आमच्या कॉलेजमध्ये विविध कोर्सेस उपलब्ध आहेत. कृपया अधिक माहितीसाठी कोर्स यादी पहा.';
+  // Fees
+  if (q.includes('फीस') || q.includes('fees')) return 'फीस कॉलेज आणि कोर्सनुसार वेगवेगळी असते. कृपया तपशीलवार माहिती कॉलेज पेजवर पहा.';
+  // Admission
+  if (q.includes('प्रवेश') || q.includes('admission')) return 'प्रवेश प्रक्रियेबद्दल अधिक माहितीसाठी आमच्या सल्लागाराशी संपर्क साधा.';
+  // Address
+  if (q.includes('पत्ता') || q.includes('address')) return 'कॉलेजचा पत्ता कॉलेज पेजवर दिला आहे.';
+  // Thanks
+  if (q.includes('शुभेच्छा') || q.includes('thanks') || q.includes('धन्यवाद')) return 'आपले स्वागत आहे!';
+  // Commerce
+  if (q.includes('commerce') || q.includes('कॉमर्स')) return 'कॉमर्स क्षेत्रासाठी आमच्याकडे B.Com, BBA, आणि इतर कोर्सेस उपलब्ध आहेत. अधिक माहितीसाठी कोर्स यादी पहा.';
+  // Default
+  return 'माफ करा, मी तुमचा प्रश्न समजू शकलो नाही. कृपया अधिक स्पष्टपणे विचारा.';
+}
+
+function speakMarathi(msg) {
+  if ('speechSynthesis' in window) {
+    window.speechSynthesis.cancel();
+    var utter = new SpeechSynthesisUtterance(msg);
+    utter.rate = 0.95; utter.pitch = 0.7; utter.volume = 1;
+    utter.lang = 'mr-IN';
+    // Try to use a deep male voice if available
+    var voices = window.speechSynthesis.getVoices();
+    for (let v of voices) {
+      if ((v.lang === 'mr-IN' || v.lang.startsWith('en')) && v.name.toLowerCase().includes('male')) {
+        utter.voice = v;
+        break;
+      }
+    }
+    window.speechSynthesis.speak(utter);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  var userQInput = document.getElementById('user-question-input');
+  var roboAnsDiv = document.getElementById('robo-answer');
+  if (userQInput) {
+    userQInput.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        var q = userQInput.value;
+        if (!q) { speakMarathi('कृपया प्रश्न विचारा.'); return; }
+        var ans = getMarathiAnswer(q);
+        roboAnsDiv.innerText = ans; speakMarathi(ans);
+      }
+    });
+  }
+
+  // Speak greeting on button click
+  var speakBtn = document.getElementById('speak-greeting-btn');
+  if (speakBtn) {
+    speakBtn.onclick = function() { speakMarathi('नमस्कार, आपले स्वागत आहे! मी AdmitionWala Robo आहे. कृपया आपली माहिती द्या.'); };
+  }
+
+  // AI-marathi Q&A flow
+  const questions = [
+    'नमस्कार, आपले स्वागत आहे! मी आपला ॲडमिशन सहाय्यक आहे. तुमचं नाव काय आहे?',
+    'तुमची आवड किंवा क्षेत्र सांगा (उदा. अभियांत्रिकी, वैद्यकीय, वाणिज्य)',
+    'तुमचा अंदाजे बजेट (हजारात) सांगा.',
+    'कोणते शहर किंवा ठिकाण प्राधान्य आहे?'
+  ];
+  let answers = [];
+  let step = 0;
+  const qDiv = document.getElementById('ai-marathi-question');
+  const input = document.getElementById('ai-marathi-input');
+  const nextBtn = document.getElementById('ai-marathi-next');
+  const formEl = document.getElementById('ai-marathi-form-el');
+
+  function askQuestion() {
+    input.value = '';
+    input.type = (step === 2) ? 'number' : 'text';
+    input.placeholder = (step === 2) ? 'उदा. 200' : '';
+    qDiv.innerText = questions[step];
+    speakMarathi(questions[step]);
+    input.focus();
+  }
+
+  let greeted = false;
+  nextBtn.addEventListener('click', function greetFirst() {
+    if (!greeted && step === 0 && answers.length === 0) {
+      speakMarathi('नमस्कार, आपले स्वागत आहे! मी आपला ॲडमिशन सहाय्यक आहे. कृपया आपली माहिती द्या.');
+      greeted = true;
+      setTimeout(askQuestion, 1800);
+      return;
+    }
+  }, { once: true });
+  askQuestion();
+
+  nextBtn.onclick = function() {
+    let val = input.value.trim();
+    if (!val) { speakMarathi('कृपया उत्तर द्या.'); return; }
+    answers.push(val); step++;
+    if (step < questions.length) { askQuestion(); }
+    else {
+      input.style.display = 'none'; nextBtn.style.display = 'none';
+      let [name, interest, budget, location] = answers;
+      formEl.innerHTML += `<input type="hidden" name="name" value="${name}">`;
+      formEl.innerHTML += `<input type="hidden" name="interest" value="${interest}">`;
+      formEl.innerHTML += `<input type="hidden" name="budget" value="${budget}">`;
+      formEl.innerHTML += `<input type="hidden" name="location" value="${location}">`;
+      formEl.submit();
+    }
+  };
+
+});
+</script>
+
+
+
+  </div>
+  <script>
+    // Sticky header and mobile menu toggle
+    (function(){
+      var header = document.querySelector('.site-header');
+      var hamb = document.querySelector('.hamburger');
+      var nav = document.querySelector('.main-nav');
+      window.addEventListener('scroll', function(){
+        if(window.scrollY > 60) header.classList.add('sticky'); else header.classList.remove('sticky');
+      });
+      if(hamb){ hamb.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); }); }
+      // close menu on nav item click (mobile)
+      nav && nav.addEventListener('click', function(e){ if(e.target.tagName==='A' && document.body.classList.contains('menu-open')) document.body.classList.remove('menu-open'); });
+    })();
+  </script>
+  <div class="footer">&copy; 2025 AdmitionWala.</div>
+</body>
+</html>
+

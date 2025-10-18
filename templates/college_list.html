@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_head %}
+  <title>Search Colleges - AdmitionWala</title>
+  <meta name="description" content="Browse detailed college profiles, compare courses and read reviews. Find the right college for your interest and location.">
+  <meta property="og:title" content="Search Colleges - AdmitionWala">
+  <meta property="og:description" content="Browse detailed college profiles, compare courses and read reviews. Find the right college for your interest and location.">
+  <meta property="og:image" content="{% static 'college_logo.svg' %}">
+{% endblock %}
+
+{% block content %}
+  <h2 class="animated bounce accent-text" style="text-align:center;margin-bottom:24px;font-size:2em;">Find Colleges</h2>
+  <form method="get" class="animated fadeInUp panel" style="max-width:500px;margin:0 auto 24px auto;display:flex;gap:10px;align-items:center;">
+  <input name="q" placeholder="Search by name or location" value="{{ request.GET.q }}" class="input-accent" style="flex:1;" />
+  <button type="submit" class="accent-btn" style="padding:10px 22px;">Search</button>
+  </form>
+  <div class="animated fadeInUp" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px;margin:0 auto;">
+    {% for college in colleges %}
+  <div class="card" style="display:flex;flex-direction:column;align-items:flex-start;">
+  <div class="accent-text" style="font-size:1.1em;font-weight:700;margin-bottom:6px;">{{ college.name }}</div>
+    <div style="color:#9aa;margin-bottom:12px;">{{ college.location }}</div>
+  <a href="/college/{{ college.id }}/" class="accent-btn" style="margin-top:auto;color:#fff;padding:7px 16px;">View Details</a>
+      </div>
+    {% empty %}
+      <div style="grid-column:1/-1;text-align:center;color:#888;font-size:1.1em;">No colleges found.</div>
+    {% endfor %}
+  </div>
+{% endblock %}

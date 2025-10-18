@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AdmitionWala</title>
+  <link rel="stylesheet" href="/static/custom.css">
+</head>
+<body>
+  <div class="bg-animations" aria-hidden="true"></div>
+
+  <header class="site-header">
+    <div class="topbar">
+      <div class="top-left">1800-572-9877 &nbsp; hello@admitionwala.com</div>
+      <div class="top-right">We're on your favourite socials! &nbsp;
+      
+        <a href="/login/">Login</a>
+      
+      </div>
+    </div>
+    <div class="header-main">
+      <div class="logo"><img src="/static/college_logo.svg" alt="AdmitionWala logo"/></div>
+      <div class="header-right">
+      <form action="/colleges/" method="get" class="header-search">
+        <input name="q" type="search" placeholder="Search colleges, courses or cities" aria-label="Search" />
+        <button type="submit">Explore</button>
+        </form>
+        <nav class="main-nav">
+        <ul>
+          <li><a href="/colleges/">Explore Colleges</a></li>
+          <li>Exams</li>
+          <li>Courses</li>
+          <li>Careers</li>
+          <li>Latest</li>
+          <li><a href="/admition-counseling/">Counseling</a></li>
+          <li><a href="/apply/">Apply</a></li>
+        </ul>
+        </nav>
+        <button class="hamburger" aria-label="Open menu">☰</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="container animated fadeInUp">
+    
+  <div class="hero">
+    <div class="hero-copy">
+        <h1 class="animated fadeInUp">Find. Match. Apply.</h1>
+      <p class="lead">Guiding students and parents to find the right college. Building a better future, one student at a time.</p>
+      <div class="cta-row">
+          <a href="/colleges/" class="animated bounce">Explore Colleges</a>
+          <a href="/apply/" class="animated bounce">Apply Now</a>
+      </div>
+    </div>
+    <div class="hero-media animated fadeInUp">
+      <div style="width:86%;height:86%;border-radius:8px;background:linear-gradient(180deg, rgba(255,255,255,0.04), rgba(0,0,0,0.08));display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.85);font-weight:700">Demo Video</div>
+    </div>
+  </div>
+  <div class="animated fadeInUp" style="display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:stretch;">
+    <div style="flex:1 1 260px;min-width:240px;" class="panel">
+      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Find Your College</h2>
+      <p>Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
+  <a href="/colleges/" class="accent-btn" style="color:#fff;">Search Colleges</a>
+    </div>
+    <div style="flex:1 1 260px;min-width:240px;" class="panel">
+      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Admition Counseling (Marathi)</h2>
+      <p>रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
+  <a href="/admition-counseling/" class="accent-btn" style="color:#fff;">Start Counseling</a>
+    </div>
+    <div style="flex:1 1 260px;min-width:240px;" class="panel">
+      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Latest News</h2>
+      <p>Stay updated with the latest news, trends, and tips in education and admissions.</p>
+  <a href="/news/" class="accent-btn" style="color:#fff;">View News</a>
+    </div>
+  </div>
+  <script>
+    // Marathi greeting on homepage
+    function speakMarathi(msg) {
+      if ('speechSynthesis' in window) {
+        var utter = new SpeechSynthesisUtterance(msg);
+        utter.rate = 0.95; utter.pitch = 0.7; utter.volume = 1;
+        utter.lang = 'mr-IN';
+        window.speechSynthesis.speak(utter);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var isAuth = "false" === "true";
+      if (!isAuth) {
+        speakMarathi('नमस्कार, आपले स्वागत आहे! कृपया ॲडमिशन काउंसलिंगसाठी पुढे जा.');
+      }
+    });
+  </script>
+
+  </div>
+  <script>
+    // Sticky header and mobile menu toggle
+    (function(){
+      var header = document.querySelector('.site-header');
+      var hamb = document.querySelector('.hamburger');
+      var nav = document.querySelector('.main-nav');
+      window.addEventListener('scroll', function(){
+        if(window.scrollY > 60) header.classList.add('sticky'); else header.classList.remove('sticky');
+      });
+      if(hamb){ hamb.addEventListener('click', function(){ document.body.classList.toggle('menu-open'); }); }
+      // close menu on nav item click (mobile)
+      nav && nav.addEventListener('click', function(e){ if(e.target.tagName==='A' && document.body.classList.contains('menu-open')) document.body.classList.remove('menu-open'); });
+    })();
+  </script>
+  <div class="footer">&copy; 2025 AdmitionWala.</div>
+</body>
+</html>
+

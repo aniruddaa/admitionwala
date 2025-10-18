@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+  <title>{{ job.title }} at {{ job.company }} - Careers</title>
+  <meta name="description" content="{{ job.title }} at {{ job.company }} in {{ job.location }}">
+{% endblock %}
+{% block content %}
+  <div class="job-page container" style="max-width:1100px;margin:24px auto;display:flex;gap:24px;align-items:flex-start">
+    <main style="flex:1">
+      <section class="job-header" style="background:#fff;padding:18px;border-radius:8px;border:1px solid #eee;margin-bottom:12px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <h1 style="margin:0;font-size:20px">{{ job.title }}</h1>
+            <div style="color:#666;margin-top:6px">{{ job.company }} • {{ job.location }}{% if job.is_remote %} • Remote{% endif %}</div>
+            {% if is_auto_mapped %}
+              <div style="margin-top:8px;padding:8px;background:#fff8e6;border-radius:6px;color:#6a4b00">Auto-created from informational listing</div>
+            {% endif %}
+          </div>
+          <div style="text-align:right">
+            {% if job.apply_link %}
+              <a href="{{ job.apply_link }}" target="_blank" class="apply-btn">Apply at Company</a>
+            {% else %}
+              {% if not is_career_entry %}
+                <a href="{% url 'job_apply' job.id %}" class="apply-btn">Apply on site</a>
+              {% endif %}
+            {% endif %}
+            <div style="margin-top:8px">
+              {% if user.is_authenticated %}
+                <button id="bookmark-btn" class="outline-btn">{% if is_bookmarked %}Saved{% else %}Save{% endif %}</button>
+                <button id="easy-apply-btn" class="outline-btn">Easy Apply</button>
+              {% else %}
+                <a href="{% url 'login' %}?next={% url 'job_detail' job.id %}" class="outline-btn">Sign in to quick apply</a>
+              {% endif %}
+            </div>
+            <div style="color:#999;font-size:12px;margin-top:10px">Posted: {{ job.posted_at|date:"M d, Y" }}</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="job-body" style="background:#fff;padding:18px;border-radius:8px;border:1px solid #eee;">
+        <h3 style="margin-top:0">Job description</h3>
+        <div style="color:#444;line-height:1.6">{{ job.description|linebreaksbr }}</div>
+
+        {% if responsibilities %}
+        <h4 style="margin-top:16px">Responsibilities</h4>
+        <ul>
+          {% for r in responsibilities %}
+            <li>{{ r }}</li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if skills %}
+        <h4 style="margin-top:16px">Skills</h4>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          {% for s in skills %}
+            <span class="skill-tag">{{ s }}</span>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+      </section>
+
+      <section style="margin-top:12px">
+        <h4>People also viewed</h4>
+        <div id="job-recs" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      </section>
+    </main>
+
+    <aside style="width:320px;">
+      <div class="company-card" style="background:#fff;padding:16px;border-radius:8px;border:1px solid #eee;">
+        <h3 style="margin:0">{{ job.company }}</h3>
+        <div style="color:#666;margin-top:6px">Open roles: {{ company_jobs_count }}</div>
+        {% if company_link %}
+          <a href="{{ company_link }}" style="display:inline-block;margin-top:10px" class="accent-btn">View company</a>
+        {% endif %}
+      </div>
+
+      <div style="margin-top:12px;background:#fff;padding:12px;border-radius:8px;border:1px solid #eee;">
+        <h4 style="margin:0 0 8px 0">Apply options</h4>
+        {% if job.apply_link %}
+          <a href="{{ job.apply_link }}" target="_blank" class="accent-btn">Apply at Company</a>
+        {% elif not is_career_entry %}
+          <a href="{% url 'job_apply' job.id %}" class="accent-btn">Apply on site</a>
+        {% else %}
+          <div style="color:#777">This is an informational listing. Contact company for details.</div>
+        {% endif %}
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    (function(){
+      fetch('{% url "job_recommendations" job.id %}').then(r=>r.json()).then(j=>{
+        var el = document.getElementById('job-recs');
+        j.results.forEach(function(rp){
+          var card = document.createElement('div'); card.style.minWidth='200px'; card.style.border='1px solid #eee'; card.style.padding='8px'; card.style.borderRadius='6px';
+          card.innerHTML = `<div style="font-weight:700">${rp.title}</div><div style="color:#9aa">${rp.company}</div><a href="/job/${rp.id}/" class="accent-btn" style="margin-top:8px;display:inline-block">View</a>`;
+          el.appendChild(card);
+        })
+      })
+    })();
+  </script>
+
+  <script>
+    (function(){
+      var bm = document.getElementById('bookmark-btn');
+      if(!bm) return;
+      bm.addEventListener('click', function(){
+        bm.disabled = true;
+        function getCookie(name) { var v = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)'); return v ? v.pop() : ''; }
+        var csrftoken = getCookie('csrftoken');
+        fetch('{% url "job_bookmark" job.id %}', { method: 'POST', headers: {'X-Requested-With':'XMLHttpRequest', 'X-CSRFToken': csrftoken } })
+          .then(r=>r.json()).then(j=>{ if(j.ok){ bm.textContent = j.saved ? 'Saved' : 'Save'; } else alert('Error saving'); }).catch(()=>alert('Error saving')).finally(()=>bm.disabled=false);
+      });
+    })();
+  </script>
+
+  <script>
+    (function(){
+      var easyBtn = document.getElementById('easy-apply-btn');
+      var modal = document.getElementById('easy-apply-modal');
+      if(!easyBtn) return;
+      easyBtn.addEventListener('click', function(){
+        // open existing Easy Apply modal if present
+        if(modal){ modal.style.display='flex'; }
+        else { window.location = '{% url "job_apply" job.id %}'; }
+      });
+    })();
+  </script>
+{% endblock %}

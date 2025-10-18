@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+  <title>{{ course.name }} - AdmitionWala</title>
+  <meta name="description" content="{{ course.name }} at {{ course.college.name }}. Stream: {{ course.stream }}; Duration: {{ course.duration }}">
+{% endblock %}
+{% block content %}
+  <div class="panel" style="max-width:800px;margin:24px auto;">
+    <h2 class="accent-text">{{ course.name }}</h2>
+    <div style="color:#666;margin-bottom:12px;">{{ course.college.name }} — {{ course.college.location }}</div>
+    <p><strong>Stream:</strong> {{ course.stream }}</p>
+    <p><strong>Duration:</strong> {{ course.duration }}</p>
+    <p><strong>Eligibility:</strong> {{ course.eligibility|default:'See college page for details' }}</p>
+    <p><strong>Fees:</strong> {% if course.fees %}₹{{ course.fees }}{% else %}Contact college{% endif %}</p>
+    {% if course.description %}
+      <div style="margin-top:12px;line-height:1.5;color:#444;">{{ course.description }}</div>
+    {% endif %}
+    {% if course.brochure %}
+      <div style="margin-top:12px;"><a href="{{ course.brochure.url }}" class="accent-btn" target="_blank">Download Course Brochure (PDF)</a></div>
+    {% endif %}
+  </div>
+{% endblock %}

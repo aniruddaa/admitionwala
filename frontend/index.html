@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AditionWala — Signup / Login Demo</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1724;--card:#0b1220;--accent:#7c3aed;--muted:#94a3b8}
+    *{box-sizing:border-box}
+    body{font-family:Inter,system-ui,Segoe UI,Arial;margin:0;background:linear-gradient(135deg,#071029 0%, #0b1220 50%);color:#e6eef8;min-height:100vh;display:flex;align-items:center;justify-content:center}
+    .wrap{width:920px;max-width:95%;display:grid;grid-template-columns:1fr 420px;gap:24px;align-items:center}
+    .hero{padding:28px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);border-radius:12px;border:1px solid rgba(255,255,255,0.04);backdrop-filter: blur(6px)}
+    h1{margin:0 0 8px;font-size:26px}
+    p.lead{margin:0 0 18px;color:var(--muted)}
+    .animated-box{height:180px;border-radius:10px;overflow:hidden;position:relative;background:linear-gradient(90deg, rgba(124,58,237,0.12), rgba(14,165,233,0.08));display:flex;align-items:center;justify-content:center}
+    .pulse{width:80px;height:80px;border-radius:50%;background:radial-gradient(circle at 30% 30%, #7c3aed, #5b21b6);animation:pulse 2s infinite}
+    @keyframes pulse{0%{transform:scale(1);box-shadow:0 0 0 0 rgba(124,58,237,0.6)}50%{transform:scale(1.06);box-shadow:0 0 40px 10px rgba(124,58,237,0.06)}100%{transform:scale(1);box-shadow:0 0 0 0 rgba(124,58,237,0)}}
+
+    .card{padding:20px;background:linear-gradient(180deg,#061022, #071428);border-radius:12px;border:1px solid rgba(255,255,255,0.03)}
+    .form label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+    .form input{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:inherit;margin-bottom:12px}
+    .btn{display:inline-block;padding:10px 14px;border-radius:8px;background:linear-gradient(90deg,var(--accent),#06b6d4);color:white;border:none;cursor:pointer}
+    .toggle{margin-bottom:12px;color:var(--muted);font-size:13px}
+    .small{font-size:13px;color:var(--muted)}
+
+    /* login panel */
+    .panel { padding:20px; }
+    .success { color:#34d399 }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="hero card">
+      <h1>AditionWala</h1>
+      <p class="lead">AI-first consultancy & marketing — demo signup/login (no server required). Your account is stored locally in your browser only.</p>
+
+      <div class="animated-box" aria-hidden>
+        <div class="pulse" title="AditionWala pulse"></div>
+      </div>
+
+      <h3 style="margin-top:18px">Why local auth?</h3>
+      <p class="small">This demo implements signup and login entirely client-side using the Web Crypto API and localStorage so you can run it directly (no installs).</p>
+    </div>
+
+    <div class="card panel">
+      <div id="auth-root">
+        <!-- dynamic content -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Minimal client-side auth using Web Crypto + localStorage
+    // Utilities
+    async function sha256hex(text){
+      const enc = new TextEncoder();
+      const data = enc.encode(text);
+      const hash = await crypto.subtle.digest('SHA-256', data);
+      return Array.from(new Uint8Array(hash)).map(b => b.toString(16).padStart(2,'0')).join('');
+    }
+
+    const root = document.getElementById('auth-root');
+
+    function showMessage(msg, cls=''){
+      const el = document.createElement('div'); el.className = cls; el.textContent = msg; return el;
+    }
+
+    function getUsers(){ try { return JSON.parse(localStorage.getItem('aw_users')||'{}'); } catch(e){ return {}; } }
+    function saveUsers(u){ localStorage.setItem('aw_users', JSON.stringify(u)); }
+
+    function renderLogin(){
+      root.innerHTML='';
+      const form = document.createElement('div');
+      form.innerHTML = `
+        <h2>Sign in</h2>
+        <label>Email</label>
+        <input id="email" type="email" placeholder="you@example.com" />
+        <label>Password</label>
+        <input id="pwd" type="password" placeholder="password" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="signin" class="btn">Sign in</button>
+          <button id="toSignup" class="btn" style="background:#334155">Create account</button>
+        </div>
+        <div id="msg" style="margin-top:12px"></div>
+      `;
+      root.appendChild(form);
+
+      document.getElementById('toSignup').onclick = renderSignup;
+      document.getElementById('signin').onclick = async () => {
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const pwd = document.getElementById('pwd').value;
+        const users = getUsers();
+        const msg = document.getElementById('msg'); msg.innerHTML='';
+        if(!email||!pwd){ msg.appendChild(showMessage('Enter email and password','')); return; }
+        if(!users[email]){ msg.appendChild(showMessage('No account found.','')); return; }
+        const hash = await sha256hex(pwd + users[email].salt);
+        if(hash === users[email].pass){
+          localStorage.setItem('aw_session', JSON.stringify({email, at:Date.now()}));
+          renderDashboard(email);
+        } else { msg.appendChild(showMessage('Invalid credentials.','')); }
+      };
+    }
+
+    function renderSignup(){
+      root.innerHTML='';
+      const form = document.createElement('div');
+      form.innerHTML = `
+        <h2>Create account</h2>
+        <label>Email</label>
+        <input id="su_email" type="email" placeholder="you@example.com" />
+        <label>Password</label>
+        <input id="su_pwd" type="password" placeholder="password" />
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <button id="signup" class="btn">Create account</button>
+          <button id="toLogin" class="btn" style="background:#334155">Back to sign in</button>
+        </div>
+        <div id="msg" style="margin-top:12px"></div>
+      `;
+      root.appendChild(form);
+      document.getElementById('toLogin').onclick = renderLogin;
+      document.getElementById('signup').onclick = async () => {
+        const email = document.getElementById('su_email').value.trim().toLowerCase();
+        const pwd = document.getElementById('su_pwd').value;
+        const msg = document.getElementById('msg'); msg.innerHTML='';
+        if(!email||!pwd){ msg.appendChild(showMessage('Enter email and password','')); return; }
+        const users = getUsers();
+        if(users[email]){ msg.appendChild(showMessage('Account already exists','')); return; }
+        const salt = Math.random().toString(36).slice(2,10);
+        const hash = await sha256hex(pwd + salt);
+        users[email] = { pass: hash, salt, created: Date.now() };
+        saveUsers(users);
+        msg.appendChild(showMessage('Account created — signing you in','success'));
+        localStorage.setItem('aw_session', JSON.stringify({email, at:Date.now()}));
+        setTimeout(()=>renderDashboard(email),700);
+      };
+    }
+
+    function renderDashboard(email){
+      root.innerHTML='';
+      const panel = document.createElement('div');
+      panel.innerHTML = `
+        <h2>Welcome back</h2>
+        <p class="small">Signed in as <strong>${email}</strong></p>
+        <div style="margin-top:12px"> 
+          <button id="logout" class="btn" style="background:#ef4444">Sign out</button>
+        </div>
+        <hr style="margin:14px 0;border-color:rgba(255,255,255,0.04)" />
+        <h3>Quick demo</h3>
+        <p class="small">Animated lead panel (client-only)</p>
+        <div style="display:flex;gap:8px;margin-top:12px">
+          <div style="flex:1;padding:12px;background:linear-gradient(90deg,#06202b,#072038);border-radius:8px"> 
+            <h4 style="margin:0">Lead Score</h4>
+            <div id="scoreBar" style="height:18px;background:#0b1220;border-radius:12px;margin-top:8px;overflow:hidden"><div id="scoreFill" style="height:100%;width:0;background:linear-gradient(90deg,#7c3aed,#06b6d4);transition:width 900ms ease"></div></div>
+          </div>
+          <div style="width:160px;padding:12px;background:linear-gradient(90deg,#061428,#071830);border-radius:8px;text-align:center"> 
+            <h4 style="margin:0">Actions</h4>
+            <button id="genScore" class="btn" style="margin-top:8px">Generate</button>
+          </div>
+        </div>
+      `;
+      root.appendChild(panel);
+      document.getElementById('logout').onclick = ()=>{ localStorage.removeItem('aw_session'); renderLogin(); };
+      document.getElementById('genScore').onclick = ()=>{
+        const val = Math.floor(Math.random()*100);
+        const fill = document.getElementById('scoreFill'); fill.style.width = val+'%';
+      };
+      // auto animate
+      setTimeout(()=>{ document.getElementById('scoreFill').style.width = (40 + Math.floor(Math.random()*40)) + '%'; }, 600);
+    }
+
+    // bootstrap
+    (function(){
+      const s = localStorage.getItem('aw_session');
+      if(s){ try { const sess = JSON.parse(s); if(sess.email) return renderDashboard(sess.email); } catch(e){} }
+      renderLogin();
+    })();
+  </script>
+</body>
+</html>

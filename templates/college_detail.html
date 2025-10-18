@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block page_head %}
+  <title>{{ college.name }} - AdmitionWala</title>
+  <meta name="description" content="{{ college.description|default:"Find details, courses, reviews and contact info for "|add:college.name }}">
+  <meta property="og:title" content="{{ college.name }} - AdmitionWala">
+  <meta property="og:description" content="{{ college.description|default:"" }}">
+  {% if college.logo %}
+     <meta property="og:image" content="{{ college.logo.url }}">
+  {% else %}
+    <meta property="og:image" content="{% static 'college_logo.svg' %}">
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollegeOrUniversity",
+    "name": "{{ college.name|escapejs }}",
+    "description": "{{ college.description|default:''|escapejs }}",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "{{ college.location|escapejs }}"
+    },
+    "url": "{{ request.build_absolute_uri }}"
+    {% if college.website %},
+    "sameAs": "{{ college.website }}"{% endif %}
+    {% if college.logo %},
+    "logo": "{{ college.logo.url }}"{% endif %}
+    {% if college.phone %},
+    "telephone": "{{ college.phone|escapejs }}"{% endif %}
+    {% if college.latitude and college.longitude %},
+    "geo": { "@type": "GeoCoordinates", "latitude": {{ college.latitude }}, "longitude": {{ college.longitude }} }{% endif %}
+  }
+  </script>
+  <div class="animated bounce" style="text-align:center;margin-bottom:24px;">
+  <h2 class="accent-text" style="font-size:2em;margin-bottom:6px;">{{ college.name }}</h2>
+    <div style="color:#555;font-size:1.1em;">{{ college.location }}</div>
+  </div>
+  {% if college.logo %}
+  <div style="text-align:center;margin-bottom:12px;"><img src="{{ college.logo.url }}" alt="{{ college.name }} logo" style="max-height:120px;object-fit:contain;"/></div>
+  {% endif %}
+  <div class="animated fadeInUp" style="max-width:800px;margin:0 auto;display:flex;flex-wrap:wrap;gap:32px;">
+  <div class="panel" style="flex:2 1 340px;min-width:260px;padding:22px 18px;">
+  <h3 class="accent-text" style="margin-bottom:8px;">About</h3>
+      <p style="margin-bottom:18px;">{{ college.description }}</p>
+  <h3 class="accent-text" style="margin-bottom:8px;">Courses</h3>
+      <ul style="margin-bottom:18px;">
+        {% for course in college.courses.all %}
+          <li>{{ course.name }} ({{ course.stream }}) - {{ course.duration }}</li>
+        {% empty %}
+          <li>No courses listed.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  <div class="panel" style="flex:1 1 220px;min-width:220px;padding:22px 18px;">
+  <h3 class="accent-text" style="margin-bottom:8px;">Reviews</h3>
+  {% if college.background_image %}
+    <div style="margin-bottom:12px;text-align:center;"><img src="{{ college.background_image.url }}" alt="Background" style="width:100%;height:auto;border-radius:8px;object-fit:cover"/></div>
+  {% endif %}
+      <ul>
+        {% for review in college.reviews.all %}
+          <li style="margin-bottom:10px;"><b>{{ review.user.username }}</b>: <span style="color:#f59e42;">{{ review.rating }}/5</span> - {{ review.text }}</li>
+        {% empty %}
+          <li>No reviews yet.</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+{% endblock %}

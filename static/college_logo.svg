@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="220" height="48" viewBox="0 0 220 48">
+  <rect width="220" height="48" rx="8" fill="#071428"/>
+  <text x="16" y="32" fill="#FF6A3D" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="800">AdmitionWala</text>
+  <path d="M188 12c6 0 10 6 10 12s-4 12-10 12-12-6-12-12 6-12 12-12z" fill="#FF6A3D"/>
+  <text x="182" y="28" fill="#071428" font-size="11" font-weight="800">AI</text>
+  <rect x="6" y="6" width="12" height="12" rx="3" fill="#FF6A3D" opacity="0.08"/>
+</svg>

@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="panel" style="max-width:900px;margin:24px auto;">
+    <h2 class="accent-text">Apply with One Form</h2>
+    <p>Fill a single application form and apply to multiple colleges (demo flow).</p>
+    <form method="post">
+      {% csrf_token %}
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <input name="name" placeholder="Full name" />
+        <input name="email" placeholder="Email" />
+        <input name="phone" placeholder="Phone" />
+        <input name="qualification" placeholder="Highest qualification" />
+      </div>
+  <div style="margin-top:12px;"><button type="submit" class="accent-btn">Submit Application</button></div>
+    </form>
+  </div>
+{% endblock %}

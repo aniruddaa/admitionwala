@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div class="animated bounce" style="text-align:center;margin-bottom:24px;">
+  <h2 class="accent-text" style="font-size:2em;margin-bottom:6px;">User Dashboard</h2>
+    <div id="ai-dashboard-greeting" style="color:#555;font-size:1.1em;">Welcome, <b>{{ user.username }}</b></div>
+  </div>
+  <script>
+    function speak(msg) {
+      if ('speechSynthesis' in window) {
+        var utter = new SpeechSynthesisUtterance(msg);
+        utter.rate = 0.95; utter.pitch = 0.7; utter.volume = 1;
+        utter.lang = 'en-US';
+        window.speechSynthesis.speak(utter);
+      }
+    }
+    window.addEventListener('DOMContentLoaded', function() {
+      var msg = 'Hello, {{ user.username|default:"student" }}, you are welcome. So how can I help you? Please provide your information for counseling.';
+      document.getElementById('ai-dashboard-greeting').innerText = msg;
+      speak(msg);
+    });
+  </script>
+
+  <div id="ai-assistant-form" class="panel" style="max-width:420px;margin:32px auto 0 auto;">
+    <form id="assistantForm" style="display:flex;flex-direction:column;gap:14px;">
+      <label for="interest">What is your main interest or stream?</label>
+      <input id="interest" name="interest" type="text" required placeholder="e.g. Engineering, Medical, Commerce" />
+      <label for="budget">What is your budget (in thousands)?</label>
+      <input id="budget" name="budget" type="number" min="1" max="1000" required placeholder="e.g. 200" />
+      <label for="location">Preferred location?</label>
+      <input id="location" name="location" type="text" required placeholder="e.g. Mumbai, Pune" />
+  <button type="submit" class="accent-btn" style="padding:10px 0;">Submit</button>
+    </form>
+  <div id="ai-response" class="accent-text" style="margin-top:18px;font-weight:500;"></div>
+  <div style="text-align:center;margin-top:12px;"><a href="/exams/" class="accent-btn">Browse Certified Courses</a></div>
+  </div>
+  <script>
+    document.getElementById('assistantForm').onsubmit = function(e) {
+      e.preventDefault();
+      var interest = document.getElementById('interest').value.trim();
+      var budget = document.getElementById('budget').value.trim();
+      var location = document.getElementById('location').value.trim();
+      var response = '';
+      if (interest && budget && location) {
+        response = `Thank you! Based on your interest in ${interest}, a budget of ${budget} thousand, and preference for ${location}, here are some recommendations. Please check the college list or request personalized counseling.`;
+      } else {
+        response = 'Please fill all the information.';
+      }
+      document.getElementById('ai-response').innerText = response;
+      speak(response);
+    };
+  </script>
+  <div class="animated fadeInUp panel" style="max-width:700px;margin:0 auto;">
+  <h3 class="accent-text" style="margin-bottom:10px;">Your Counseling Requests</h3>
+  <table style="width:100%;border-collapse:collapse;border-radius:10px;overflow:hidden;">
+      <thead>
+  <tr class="accent-table-row">
+          <th style="padding:10px 6px;">Date</th>
+          <th style="padding:10px 6px;">Status</th>
+          <th style="padding:10px 6px;">Message</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for req in counseling_requests %}
+          <tr>
+            <td style="padding:8px 6px;">{{ req.created_at|date:"Y-m-d" }}</td>
+            <td style="padding:8px 6px;">{{ req.status }}</td>
+            <td style="padding:8px 6px;">{{ req.message }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="3" style="text-align:center;color:#888;padding:12px;">No requests yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div style="text-align:right;margin-top:18px;">
+    <a href="/counseling/" class="accent-btn" style="color:#fff;padding:10px 22px;">Request Counseling</a>
+      </div>
+  </div>
+{% endblock %}

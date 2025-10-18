@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+  <title>Careers - AdmitionWala</title>
+  <meta name="description" content="Career paths, job prospects and course recommendations to build your future.">
+{% endblock %}
+{% block content %}
+  <div class="panel" style="max-width:1100px;margin:24px auto;">
+    <h2 class="accent-text">Job Board — Careers</h2>
+    <p>Search current job openings, remote-friendly roles, and apply using employer links.</p>
+    <form method="get" style="margin:12px 0;display:flex;gap:8px;">
+      <input name="q" value="{{ q }}" placeholder="Search job title, company or location" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;" />
+      <button class="accent-btn">Search</button>
+    </form>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:12px;margin-top:12px;">
+      {% for job in jobs %}
+      <div class="card">
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <div style="font-weight:700">{{ job.title }}</div>
+            <div style="color:#9aa">{{ job.company }} • {{ job.location }} {% if job.is_remote %}• Remote{% endif %}</div>
+          </div>
+          <div style="text-align:right;font-size:0.9em;color:#888">{{ job.posted_at|date:"Y-m-d" }}</div>
+        </div>
+        {% if job.job_image %}
+          <div style="margin-top:8px;text-align:center;"><img src="{{ job.job_image.url }}" alt="{{ job.title }}" style="max-width:100%;height:auto;border-radius:6px;object-fit:cover"/></div>
+        {% endif %}
+        <div style="margin-top:8px;">{{ job.description|truncatechars:180 }}</div>
+        <div style="margin-top:10px;"><a href="/job/{{ job.id }}/" class="accent-btn">View</a>
+        {% if job.apply_link %}<a href="{{ job.apply_link }}" target="_blank" class="outline-btn" style="margin-left:8px;">Apply</a>{% endif %}
+        {% if user.is_authenticated and job.id %}
+          <button class="outline-btn bookmark-btn" data-job-id="{{ job.id }}" style="margin-left:8px;">Save</button>
+        {% endif %}
+        </div>
+      </div>
+      {% empty %}
+        <div style="padding:18px;color:#666;">No job listings found. Try a different search.</div>
+      {% endfor %}
+    </div>
+  </div>
+  <script>
+    (function(){
+      var buttons = document.querySelectorAll('.bookmark-btn');
+      buttons.forEach(function(b){
+        b.addEventListener('click', function(){
+          var id = b.getAttribute('data-job-id');
+          fetch('/job/'+id+'/bookmark/', {method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest','X-CSRFToken': (document.querySelector('[name=csrfmiddlewaretoken]')||{}).value}})
+            .then(r=>r.json()).then(j=>{ if(j.ok){ b.textContent = j.saved ? 'Saved' : 'Save'; } });
+        });
+      });
+    })();
+  </script>
+{% endblock %}

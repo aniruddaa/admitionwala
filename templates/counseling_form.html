@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+      <div class="animated bounce" style="text-align:center;margin-bottom:24px;">
+                        <h2 class="accent-text" style="font-size:2em;margin-bottom:6px;">Request Counseling</h2>
+                        <div style="color:#555;font-size:1.1em;">Get expert guidance for your career and college admissions</div>
+                  </div>
+                  {% if error %}<p style="color:red;text-align:center;">{{ error }}</p>{% endif %}
+                  <form method="post" class="animated fadeInUp panel" style="max-width:420px;margin:0 auto;display:flex;flex-direction:column;gap:16px;">
+    {% csrf_token %}
+    <label for="name" style="font-weight:500;">Name</label>
+          <input id="name" name="name" type="text" value="{{ user.username }}" required class="input-accent" />
+    <label for="email" style="font-weight:500;">Email</label>
+          <input id="email" name="email" type="email" value="{{ user.email }}" required class="input-accent" />
+    <label for="phone" style="font-weight:500;">Phone</label>
+          <input id="phone" name="phone" type="tel" pattern="[0-9]{10}" maxlength="10" required class="input-accent" />
+    <label for="message" style="font-weight:500;">Message</label>
+          <textarea id="message" name="message" rows="3" required class="input-accent"></textarea>
+          <button type="submit" class="animated bounce accent-btn" style="margin-top:12px;">Submit</button>
+  </form>
+{% endblock %}

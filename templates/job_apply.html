@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+  <title>Apply: {{ job.title }}</title>
+{% endblock %}
+{% block content %}
+  <div class="panel" style="max-width:900px;margin:24px auto;">
+    <h2 class="accent-text">Apply for: {{ job.title }}</h2>
+    <div style="line-height:1.6;color:#444;margin-bottom:12px">{{ job.description|linebreaksbr }}</div>
+    {% if is_career_entry %}
+      <div style="padding:12px;background:#fff6e6;border-radius:6px;margin-bottom:8px;color:#5a4200">This listing is informational (posted by admin). Applications submitted here will be recorded on our site.</div>
+    {% endif %}
+    {% if errors %}
+      <div style="padding:8px;background:#fee; border-radius:6px;margin-bottom:8px;color:#700">Please fix the errors below.</div>
+    {% endif %}
+    <form id="job-apply-form" method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1">
+          <input id="id_name" name="name" placeholder="Full name" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;" required />
+          {% if errors and 'Name is required.' in errors %}<div style="color:#700;font-size:0.9em">Name is required.</div>{% endif %}
+        </div>
+        <div style="flex:1">
+          <input id="id_email" name="email" type="email" placeholder="Email" style="width:100%;padding:8px;border-radius:6px;border:1px solid #ddd;" required />
+          {% if errors and 'Email is required.' in errors %}<div style="color:#700;font-size:0.9em">Email is required.</div>{% endif %}
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap">
+        <input name="phone" placeholder="Phone number" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;" />
+        <input name="education" placeholder="Highest education" style="flex:1;padding:8px;border-radius:6px;border:1px solid #ddd;" />
+      </div>
+  <div style="margin-top:8px">Resume (PDF/DOC): <input id="id_resume" type="file" name="resume" accept="application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" /></div>
+  <div id="resume-error" style="color:#700;font-size:0.95em;display:none;margin-top:6px"></div>
+      <div style="margin-top:12px"><button class="accent-btn" id="apply-btn" type="submit">Apply</button></div>
+    </form>
+  </div>
+  <div id="job-toast" style="position:fixed;right:18px;bottom:18px;background:#333;color:#fff;padding:12px 16px;border-radius:8px;display:none;z-index:9999"></div>
+  <script>
+    (function(){
+      var form = document.getElementById('job-apply-form');
+      var toast = document.getElementById('job-toast');
+      var resumeInput = document.getElementById('id_resume');
+      function showToast(msg, ok){ toast.textContent = msg; toast.style.background = ok ? '#154d00' : '#6b0f0f'; toast.style.display = 'block'; setTimeout(()=>toast.style.display='none',4000); }
+      // Client-side resume checks
+      function validateResume(){
+        var errEl = document.getElementById('resume-error');
+        errEl.style.display = 'none'; errEl.textContent = '';
+        var f = resumeInput.files[0];
+        if(!f) return true;
+        var allowed = ['application/pdf','application/msword','application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+        if(allowed.indexOf(f.type) === -1){ errEl.style.display='block'; errEl.textContent='Resume must be PDF, DOC or DOCX.'; return false; }
+        if(f.size > 5*1024*1024){ errEl.style.display='block'; errEl.textContent='Resume must be 5 MB or less.'; return false; }
+        return true;
+      }
+
+      form.addEventListener('submit', function(e){
+        if(!validateResume()){ e.preventDefault(); return; }
+        e.preventDefault();
+        var btn = document.getElementById('apply-btn'); btn.disabled = true; btn.textContent = 'Applying...';
+        var data = new FormData(form);
+        fetch(window.location.href, { method: 'POST', headers: {'X-Requested-With': 'XMLHttpRequest'}, body: data })
+          .then(res => res.json())
+          .then(json => {
+            if(json.ok){ showToast(json.message || 'Submitted', true); form.reset(); }
+            else { showToast((json.errors||['Error submitting']).join('; '), false); }
+          }).catch(err => { showToast('Error submitting application', false); })
+          .finally(()=>{ btn.disabled = false; btn.textContent = 'Apply'; });
+      });
+    })();
+  </script>
+{% endblock %}

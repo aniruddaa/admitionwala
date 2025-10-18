@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block page_head %}
+  <title>Our Certified Courses - AdmitionWala</title>
+  <meta name="description" content="Browse our certified courses curated by AdmitionWala. Download brochures and detailed course information.">
+{% endblock %}
+{% block content %}
+  <div class="panel" style="max-width:1000px;margin:24px auto;">
+    <h2 class="accent-text">Our Certified Courses</h2>
+    <p>These are courses certified and recommended by our counseling team. Click any course to view details and download the official brochure (if available).</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px;">
+      {% for course in courses %}
+      <div class="card">
+        <div style="display:flex;gap:12px;align-items:center;">
+          {% if course.post_image %}
+            <img src="{{ course.post_image.url }}" alt="{{ course.name }}" style="width:84px;height:64px;object-fit:cover;border-radius:8px;" />
+          {% endif %}
+          <div style="font-weight:700">{{ course.name }}</div>
+        </div>
+        <div style="color:#9aa">{{ course.college.name }} • {{ course.stream }} • {{ course.duration }}</div>
+        <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+          <a href="/course/{{ course.id }}/" class="accent-btn">View</a>
+          {% if course.brochure %}
+            <a href="{{ course.brochure.url }}" target="_blank" class="outline-btn">Download PDF</a>
+          {% endif %}
+        </div>
+      </div>
+      {% empty %}
+      <div>No certified courses available yet.</div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}
