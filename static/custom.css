@@ -70,7 +70,7 @@
 
 /* When a page provides a specific background image for a college page, switch the container to white/light mode */
 body.page-bg-present .container{
-  background: #fff !important;
+  background: #b8810b !important; /* dark yellow */
   color: #111 !important;
 }
 
@@ -83,7 +83,7 @@ body.page-bg-present .container{
  .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 6%;background:rgba(10,12,20,0.6);color:#ddd;font-size:0.95em}
  .topbar a{color:var(--accent);text-decoration:none;font-weight:600}
  .header-main{display:flex;align-items:center;justify-content:space-between;padding:18px 6%;background:linear-gradient(90deg,#071428,#081826);}
- .header-main .logo img{height:48px}
+  background: #a97c0a !important;
  .header-right{display:flex;align-items:center;gap:18px}
  .header-search{display:flex;align-items:center;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden}
  .header-search input{border:none;padding:10px 12px;min-width:260px;background:transparent;color:inherit}
@@ -379,12 +379,6 @@ button:focus, .btn:focus, input[type=submit]:focus{outline:3px solid rgba(255,25
 
 /* End of stylesheet */
 /* Additional React header styles (appended) */
-.site-header .topbar { background: rgba(0,0,0,0.6); color: #fff; padding: 6px 12px; font-size: 13px; z-index:45 }
-.site-header .header-main { background: rgba(255,255,255,0.02); padding: 8px 12px; backdrop-filter: blur(4px); }
-.site-header .logo img { height: 48px; }
-.main-nav ul { list-style: none; margin: 0; padding: 0; display: flex; gap: 12px; }
-.main-nav ul li a { text-decoration: none; color: #fff; }
-.hamburger { background: transparent; border: none; font-size: 20px; color: #fff }
 
 @media (max-width: 900px){
   .main-nav { display: none; }
