@@ -14,6 +14,9 @@
 
   function Header(props){
     const [menuOpen, setMenuOpen] = useState(false);
+    useEffect(()=>{ document.body.classList.toggle('menu-open', menuOpen); }, [menuOpen]);
+    // close menu when route changes or when clicking a link
+    function handleNavClick(ev){ if(ev.target && ev.target.tagName === 'A'){ setMenuOpen(false); } }
     return e('header', {className: 'site-header'},
       e('div', {className: 'topbar'},
         e('div', {className: 'top-left'}, '1800-572-9877 \u00A0 hello@admitionwala.com'),
@@ -26,8 +29,8 @@
             e('input', {name:'q', type:'search', placeholder:'Search colleges, courses or cities', 'aria-label':'Search'}),
             e('button', {type:'submit'}, 'Explore')
           ),
-          e('nav', {className: 'main-nav', style: {display: menuOpen ? 'block' : 'flex'}},
-            e('ul', null,
+          e('nav', {className: 'main-nav', 'aria-hidden': !menuOpen, style: {display: menuOpen ? 'block' : 'flex'}, onClick: handleNavClick},
+            e('ul', {role:'menu'},
               e('li', null, e('a',{href:'/colleges/'},'Explore Colleges')),
               e('li', null, e('a',{href:'/exams/'},'Certified Courses')),
               e('li', null, e('a',{href:'/courses/'},'All Courses')),
@@ -37,7 +40,7 @@
               e('li', null, e('a',{href:'/apply/'},'Apply'))
             )
           ),
-          e('button', {className:'hamburger', 'aria-label':'Open menu', onClick: (ev)=>{ ev.preventDefault(); setMenuOpen(!menuOpen); }}, '☰')
+          e('button', {className:'hamburger', 'aria-label':'Open menu', 'aria-expanded': menuOpen ? 'true' : 'false', onClick: (ev)=>{ ev.preventDefault(); setMenuOpen(!menuOpen); }}, '☰')
         )
       )
     );

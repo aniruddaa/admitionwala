@@ -33,12 +33,13 @@
     </style>
 </head>
 <body class="{% if page_background_url %}page-bg-present{% endif %}">
+  <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
   <div id="react-root"></div>
   <!-- React will render the header and background animations into #react-root -->
 
-  <div class="container animated fadeInUp">
+  <main id="main-content" class="container animated fadeInUp">
     {% block content %}{% endblock %}
-  </div>
+  </main>
   <script>
     // Sticky header and mobile menu toggle
     (function(){

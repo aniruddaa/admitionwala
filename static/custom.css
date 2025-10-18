@@ -390,14 +390,53 @@ button:focus, .btn:focus, input[type=submit]:focus{outline:3px solid rgba(255,25
 
 /* Strong overrides (force theme change) */
 .site-header .topbar {
-  background: #FFD700 !important; /* bright yellow */
-  color: #000 !important; /* black text */
-  font-weight: 800 !important;
+  /* keep topbar subtle and consistent with theme */
+  background: rgba(0,0,0,0.55);
+  color: #e6eef8;
+  font-weight: 600;
 }
 .site-header .header-main {
-  background: linear-gradient(180deg, #FFD700, #FFA500) !important; /* yellow -> dark-yellow */
-  color: #000 !important;
+  background: linear-gradient(90deg,#071428,#081826);
+  color: #e6eef8;
 }
+
+/* Improvements for mobile / touch devices */
+/* Make all images scale inside containers */
+.container img, .site-header img { max-width: 100%; height: auto; display: block; }
+
+/* Ensure tappable targets have adequate size */
+.main-nav ul li, .topbar a, .header-right > * { min-height: 40px; }
+
+/* Mobile-first adjustments: use breakpoints to change layout */
+@media (max-width: 900px){
+  /* Show hamburger, hide desktop nav */
+  .hamburger { display: block; }
+  .main-nav { display: none; }
+  body.menu-open .main-nav { display: block; }
+  .header-main{padding:12px 6%;}
+  .header-search input{min-width:100px}
+}
+
+@media (max-width: 720px){
+  .container{padding:16px 12px;margin:12px}
+  .hero{flex-direction:column;padding:16px}
+  .hero .hero-media{width:100%;height:auto}
+  .hero h1{font-size:1.9em}
+  .header-main{flex-direction:row;gap:8px}
+  .header-right{gap:10px}
+}
+
+/* Prefer reduced motion on user's preference */
+@media (prefers-reduced-motion: reduce){
+  .animated, .bg-animations { animation: none !important; transition: none !important; }
+}
+
+/* Skip-link visible when focused for keyboard users */
+.skip-link:focus{ position:static; left:auto; top:8px; width:auto; height:auto; overflow:visible; background:#fff; color:#000; padding:8px 12px; border-radius:6px; z-index:9999 }
+
+/* When header becomes fixed, push main content down so it's not covered */
+.site-header.sticky + main { padding-top: 84px; transition: padding-top .12s ease; }
+@media (max-width: 720px){ .site-header.sticky + main { padding-top: 64px; } }
 .site-header .topbar a, .site-header .main-nav ul li a {
   color: #000 !important;
   font-weight: 800 !important;
