@@ -10,37 +10,41 @@
 {% endblock %}
 
 {% block content %}
+  <header class="site-header">
+    <div class="logo">
+      <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" />
+    </div>
+    <button class="menu-toggle" aria-label="Open menu">&#9776;</button>
+  </header>
   <div class="hero">
     <div class="hero-copy">
-        <h1 class="animated fadeInUp">Find. Match. Apply.</h1>
+      <h1>Find. Match. Apply.</h1>
       <p class="lead">Guiding students and parents to find the right college. Building a better future, one student at a time.</p>
       <div class="cta-row">
-          <a href="/colleges/" class="animated bounce">Explore Colleges</a>
-      <a href="/apply/" class="animated bounce">Apply Now</a>
-      <a href="/exams/" class="animated bounce">Our Certified Courses</a>
+        <a href="/colleges/" class="accent-btn">Explore Colleges</a>
+        <a href="/apply/" class="accent-btn">Apply Now</a>
+        <a href="/exams/" class="accent-btn">Our Certified Courses</a>
       </div>
     </div>
-    <div class="hero-media animated fadeInUp">
-      <div style="width:86%;height:86%;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;">
-        <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="max-width:100%; max-height:100%; object-fit:contain;" />
-      </div>
+    <div class="hero-media">
+      <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" />
     </div>
   </div>
-  <div class="animated fadeInUp" style="display:flex;flex-wrap:wrap;gap:32px;justify-content:center;align-items:stretch;">
-    <div style="flex:1 1 260px;min-width:240px;" class="panel">
-      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Find Your College</h2>
+  <div class="panel-row">
+    <div class="panel">
+      <h2 class="accent-text">Find Your College</h2>
       <p>Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
-  <a href="/colleges/" class="accent-btn" style="color:#fff;">Search Colleges</a>
+      <a href="/colleges/" class="accent-btn">Search Colleges</a>
     </div>
-    <div style="flex:1 1 260px;min-width:240px;" class="panel">
-      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Admition Counseling (Marathi)</h2>
+    <div class="panel">
+      <h2 class="accent-text">Admition Counseling (Marathi)</h2>
       <p>रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
-  <a href="/admition-counseling/" class="accent-btn" style="color:#fff;">Start Counseling</a>
+      <a href="/admition-counseling/" class="accent-btn">Start Counseling</a>
     </div>
-    <div style="flex:1 1 260px;min-width:240px;" class="panel">
-      <h2 class="accent-text" style="font-size:1.3em;margin-bottom:10px;">Latest News</h2>
+    <div class="panel">
+      <h2 class="accent-text">Latest News</h2>
       <p>Stay updated with the latest news, trends, and tips in education and admissions.</p>
-  <a href="/news/" class="accent-btn" style="color:#fff;">View News</a>
+      <a href="/news/" class="accent-btn">View News</a>
     </div>
   </div>
   <script>
