@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admitionwala
+  labels:
+    app: admitionwala
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: admitionwala
+  template:
+    metadata:
+      labels:
+        app: admitionwala
+    spec:
+      containers:
+        - name: admitionwala
+          image: ghcr.io/OWNER/admitionwala:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DJANGO_SETTINGS_MODULE
+              value: "aditionwala.settings"
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 15
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: admitionwala-service
+spec:
+  type: ClusterIP
+  selector:
+    app: admitionwala
+  ports:
+    - port: 80
+      targetPort: 8000

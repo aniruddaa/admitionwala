@@ -1,0 +1,65 @@
+name: CI Build & Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  packages: write
+  id-token: write
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    env:
+      IMAGE_REGISTRY: ghcr.io
+      IMAGE_REPO: ${{ github.repository }}
+      IMAGE_TAG: ${{ github.sha }}
+      K8S_NAMESPACE: ${{ secrets.K8S_NAMESPACE }}
+      K8S_DEPLOYMENT: ${{ secrets.K8S_DEPLOYMENT }}
+      K8S_CONTAINER: ${{ secrets.K8S_CONTAINER }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: |
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+            ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}:latest
+
+      - name: Setup kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: '1.27.0'
+
+      - name: Configure Kubeconfig (from secret)
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        run: |
+          echo "Decoding KUBECONFIG from secret..."
+          echo "$KUBE_CONFIG_DATA" | base64 --decode > k8s_config || (echo 'Failed to decode KUBE_CONFIG_DATA' && exit 1)
+          export KUBECONFIG=$PWD/k8s_config
+          kubectl config view --minify
+
+      - name: Deploy to Kubernetes (set image)
+        env:
+          IMAGE: ${{ env.IMAGE_REGISTRY }}/${{ env.IMAGE_REPO }}:${{ env.IMAGE_TAG }}
+        run: |
+          echo "Updating deployment '${{ env.K8S_DEPLOYMENT }}' in namespace '${{ env.K8S_NAMESPACE }}' to image $IMAGE"
+          kubectl -n "${{ env.K8S_NAMESPACE }}" set image deployment/"${{ env.K8S_DEPLOYMENT }}" "${{ env.K8S_CONTAINER }}"=$IMAGE --record
+          kubectl -n "${{ env.K8S_NAMESPACE }}" rollout status deployment/"${{ env.K8S_DEPLOYMENT }}" --timeout=180s
