@@ -3,6 +3,36 @@
 {% block page_head %}
   <title>Apply: {{ job.title }}</title>
 {% endblock %}
+{% block header %}
+<header class="site-header">
+  <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala"/></div>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="bar-top" d="M2 3h20" />
+        <path class="bar-mid" d="M2 9h20" />
+        <path class="bar-bot" d="M2 15h20" />
+      </g>
+    </svg>
+  </button>
+</header>
+{% endblock %}
+
+{% block header %}
+<header class="site-header">
+  <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala"/></div>
+  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+    <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <path class="bar-top" d="M2 3h20" />
+        <path class="bar-mid" d="M2 9h20" />
+        <path class="bar-bot" d="M2 15h20" />
+      </g>
+    </svg>
+  </button>
+</header>
+{% endblock %}
+
 {% block content %}
   <div class="panel" style="max-width:900px;margin:24px auto;">
     <h2 class="accent-text">Apply for: {{ job.title }}</h2>

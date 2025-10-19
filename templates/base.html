@@ -20,25 +20,32 @@
   {% block page_head %}{% endblock %}
   <link rel="stylesheet" href="{% static 'custom.css' %}">
   <style>
-      :root { --page-bg-url: url('{% static "images/background.jpeg" %}'); }
-      {% if page_background_url %}
-        :root { --page-bg-url: url('{{ page_background_url }}'); }
-      {% endif %}
+      /* Use CSS variable for page background; value is injected by JS below to avoid template tags inside CSS */
       html, body {
         background: var(--page-bg-url) no-repeat center center fixed !important;
         background-size: cover !important;
         margin: 0 !important;
         height: 100%;
       }
-    </style>
+  </style>
 </head>
 <body class="{% if page_background_url %}page-bg-present{% endif %}">
   <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
-  <!-- Fallback header: shown only when a page does not render its own .site-header -->
+  <!-- Default header block; child templates may override {% block header %} -->
+  {% block header %}
   <header class="fallback-header" role="banner" aria-hidden="false">
     <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:40px"/></div>
-    <button class="menu-toggle" aria-label="Open menu">☰</button>
+    <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
+      <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path class="bar-top" d="M2 3h20" />
+          <path class="bar-mid" d="M2 9h20" />
+          <path class="bar-bot" d="M2 15h20" />
+        </g>
+      </svg>
+    </button>
   </header>
+  {% endblock %}
   <div id="react-root"></div>
   <!-- React will render the header and background animations into #react-root -->
 
@@ -70,6 +77,14 @@
     try{
       window.__DJANGO__ = JSON.parse(document.getElementById('dj-data').textContent);
     }catch(e){ window.__DJANGO__ = { user_authenticated: false, page_background_url: null, static_college_logo: '/static/college_logo.svg' }; }
+  </script>
+  <script>
+    // Set page background CSS variable from server-provided data (safe, no template tags)
+    (function(){
+      var dj = window.__DJANGO__ || {};
+      var bg = dj.page_background_url || '/static/images/background.jpeg';
+      try { document.documentElement.style.setProperty('--page-bg-url', "url('" + bg + "')"); } catch(e) { /* noop */ }
+    })();
   </script>
   <script>
     // Hide fallback header when a template provides .site-header and wire fallback toggle to overlay
@@ -119,12 +134,12 @@
       function openNav(){ lastFocused = document.activeElement; overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; var els = getFocusable(); if(els.length) els[0].focus(); }
       function closeNav(){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocused) lastFocused.focus(); }
 
-      // Toggle handlers
-      toggle && toggle.addEventListener('click', function(e){ e.preventDefault(); openNav(); });
-      closeBtn && closeBtn.addEventListener('click', function(e){ e.preventDefault(); closeNav(); });
+  // Toggle handlers
+  toggle && toggle.addEventListener('click', function(e){ e.preventDefault(); if(overlay.classList.contains('open')){ closeNav(); toggle.classList.remove('is-active'); toggle.setAttribute('aria-expanded','false'); } else { openNav(); toggle.classList.add('is-active'); toggle.setAttribute('aria-expanded','true'); } });
+  closeBtn && closeBtn.addEventListener('click', function(e){ e.preventDefault(); closeNav(); toggle && toggle.classList.remove('is-active'); toggle && toggle.setAttribute('aria-expanded','false'); });
 
       // Close when a link inside is clicked
-      overlay && overlay.addEventListener('click', function(e){ if(e.target.tagName==='A') closeNav(); });
+  overlay && overlay.addEventListener('click', function(e){ if(e.target.tagName==='A') { closeNav(); toggle && toggle.classList.remove('is-active'); toggle && toggle.setAttribute('aria-expanded','false'); } });
 
       // Close on ESC and trap focus when overlay is open
       document.addEventListener('keydown', function(e){

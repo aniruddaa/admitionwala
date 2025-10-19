@@ -126,6 +126,31 @@ header.site-header, .site-header, .header-main {
 .mobile-nav-overlay{ opacity:0; transform: translateY(-6px); transition: opacity .18s ease, transform .18s ease; }
 .mobile-nav-overlay.open{ opacity:1; transform: translateY(0); }
 
+/* Animated hamburger SVG button styles */
+.menu-toggle {
+  width:44px;
+  height:36px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:6px;
+}
+.menu-toggle svg{ width:26px; height:20px; display:block; fill:none; stroke:var(--site-contrast); stroke-width:2.2; stroke-linecap:round; transition: transform .18s ease; }
+.menu-toggle .bar-top, .menu-toggle .bar-mid, .menu-toggle .bar-bot { transition: transform .18s ease, opacity .12s ease; transform-origin: 50% 50%; }
+.menu-toggle.is-active .bar-top{ transform: translateY(6px) rotate(45deg); }
+.menu-toggle.is-active .bar-mid{ opacity:0; transform: scaleX(0.2); }
+.menu-toggle.is-active .bar-bot{ transform: translateY(-6px) rotate(-45deg); }
+
+/* Header polishing */
+header.site-header, .fallback-header{ padding:10px 3.5vw !important; }
+.site-header .logo img, .fallback-header .logo img{ height:44px !important }
+.site-header .main-nav a{ margin:0 12px; letter-spacing:0.2px; font-size:0.98rem }
+
+/* Slight hover/active states */
+.site-header .main-nav a:hover{ opacity:0.92 }
+.accent-btn{ box-shadow: none }
+
+
 /* Fallback header styles (only used if templates don't include .site-header) */
 .fallback-header{ display:flex; align-items:center; justify-content:space-between; padding:8px 4vw; background:var(--site-medium-yellow); color:var(--site-contrast); z-index:9998 }
 .fallback-header .logo img{ height:40px }
