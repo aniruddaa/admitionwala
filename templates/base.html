@@ -34,6 +34,11 @@
 </head>
 <body class="{% if page_background_url %}page-bg-present{% endif %}">
   <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
+  <!-- Fallback header: shown only when a page does not render its own .site-header -->
+  <header class="fallback-header" role="banner" aria-hidden="false">
+    <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:40px"/></div>
+    <button class="menu-toggle" aria-label="Open menu">☰</button>
+  </header>
   <div id="react-root"></div>
   <!-- React will render the header and background animations into #react-root -->
 
@@ -66,13 +71,74 @@
       window.__DJANGO__ = JSON.parse(document.getElementById('dj-data').textContent);
     }catch(e){ window.__DJANGO__ = { user_authenticated: false, page_background_url: null, static_college_logo: '/static/college_logo.svg' }; }
   </script>
+  <script>
+    // Hide fallback header when a template provides .site-header and wire fallback toggle to overlay
+    (function(){
+      var fallback = document.querySelector('.fallback-header');
+      var hasSite = document.querySelector('.site-header');
+      if(hasSite && fallback){ fallback.style.display='none'; }
+      // Wire any menu-toggle to open mobile overlay
+      var toggles = document.querySelectorAll('.menu-toggle, .hamburger');
+      var overlay = document.getElementById('mobileNav');
+      toggles && toggles.forEach(function(t){ t.addEventListener('click', function(e){ e.preventDefault(); overlay && overlay.classList.add('open'); overlay && overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; }); });
+    })();
+  </script>
   <!-- React (via CDN) and our small app to render header/background -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
   <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
   <script src="{% static 'js/react_app.js' %}"></script>
   <div class="footer">&copy; 2025 AdmitionWala.</div>
-    <a href="https://github.com/aniruddaa/admitionwala" class="github-float-btn" target="_blank" title="View on GitHub" aria-label="View on GitHub">
-      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.73.5.5 5.74.5 12.02c0 5.1 3.29 9.42 7.86 10.96.58.11.79-.25.79-.56 0-.28-.01-1.02-.02-2-3.2.7-3.88-1.54-3.88-1.54-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.78 2.73 1.27 3.4.97.11-.75.41-1.27.74-1.56-2.56-.29-5.26-1.28-5.26-5.7 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.19a11.1 11.1 0 0 1 2.9-.39c.98 0 1.97.13 2.9.39 2.2-1.5 3.17-1.19 3.17-1.19.63 1.59.23 2.76.11 3.05.74.81 1.19 1.85 1.19 3.11 0 4.43-2.7 5.41-5.27 5.7.42.36.79 1.09.79 2.2 0 1.59-.01 2.87-.01 3.26 0 .31.21.68.8.56C20.71 21.44 24 17.12 24 12.02 24 5.74 18.27.5 12 .5z"/></svg>
-    </a>
+  <!-- Mobile navigation overlay -->
+  <div class="mobile-nav-overlay" id="mobileNav" aria-hidden="true">
+    <div class="mobile-nav-header">
+      <div class="mobile-nav-logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:36px"/></div>
+      <button class="mobile-nav-close" id="mobileNavClose" aria-label="Close menu">&times;</button>
+    </div>
+    <nav class="mobile-nav-links" role="navigation" aria-label="Mobile Main Navigation">
+      <a href="/colleges/">Explore Colleges</a>
+      <a href="/courses/">All Courses</a>
+      <a href="/careers/">Careers</a>
+      <a href="/about/">About Us</a>
+      <a href="/apply/">Apply</a>
+      <a href="/admition-counseling/">Counseling</a>
+    </nav>
+    <div class="mobile-nav-contact">Call us: 1800-572-9877<br/>hello@admitionwala.com</div>
+  </div>
+
+  <!-- GitHub button removed as requested -->
+  <script>
+    // Mobile nav overlay toggle (accessible) with focus trap
+    (function(){
+      var toggle = document.querySelector('.menu-toggle') || document.querySelector('.hamburger');
+      var overlay = document.getElementById('mobileNav');
+      var closeBtn = document.getElementById('mobileNavClose');
+      var focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+      var lastFocused = null;
+
+      function getFocusable(){ return overlay ? Array.prototype.slice.call(overlay.querySelectorAll(focusableSelectors)) : []; }
+      function openNav(){ lastFocused = document.activeElement; overlay.classList.add('open'); overlay.setAttribute('aria-hidden','false'); document.body.style.overflow='hidden'; var els = getFocusable(); if(els.length) els[0].focus(); }
+      function closeNav(){ overlay.classList.remove('open'); overlay.setAttribute('aria-hidden','true'); document.body.style.overflow=''; if(lastFocused) lastFocused.focus(); }
+
+      // Toggle handlers
+      toggle && toggle.addEventListener('click', function(e){ e.preventDefault(); openNav(); });
+      closeBtn && closeBtn.addEventListener('click', function(e){ e.preventDefault(); closeNav(); });
+
+      // Close when a link inside is clicked
+      overlay && overlay.addEventListener('click', function(e){ if(e.target.tagName==='A') closeNav(); });
+
+      // Close on ESC and trap focus when overlay is open
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape') return closeNav();
+        if(e.key === 'Tab' && overlay.classList.contains('open')){
+          var focusable = getFocusable();
+          if(focusable.length === 0){ e.preventDefault(); return; }
+          var first = focusable[0];
+          var last = focusable[focusable.length -1];
+          if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+          else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
