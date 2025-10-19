@@ -1,20 +1,7 @@
 {% extends 'base.html' %}
-{% block header %}
-<header class="site-header">
-  <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala"/></div>
-  <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
-    <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
-        <path class="bar-top" d="M2 3h20" />
-        <path class="bar-mid" d="M2 9h20" />
-        <path class="bar-bot" d="M2 15h20" />
-      </g>
-    </svg>
-  </button>
-</header>
-{% endblock %}
+{% load static %}
 
-{% block header %}
+{% block site_header %}
 <header class="site-header">
   <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala"/></div>
   <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
@@ -54,39 +41,24 @@
 // Simple rule-based Marathi answers (expand as needed)
 function getMarathiAnswer(q) {
   q = q.trim();
-  // Greetings
+  if (!q) return '';
   if (q.includes('नमस्कार') || q.includes('hello') || q.includes('हाय') || q.includes('hi') || q.includes('स्वागत'))
     return 'नमस्कार! मी AdmitionWala Robo आहे. तुम्ही मला कोणताही प्रश्न विचारू शकता.';
-  // Courses
   if (q.includes('कोर्स') || q.includes('course')) return 'आमच्या कॉलेजमध्ये विविध कोर्सेस उपलब्ध आहेत. कृपया अधिक माहितीसाठी कोर्स यादी पहा.';
-  // Fees
   if (q.includes('फीस') || q.includes('fees')) return 'फीस कॉलेज आणि कोर्सनुसार वेगवेगळी असते. कृपया तपशीलवार माहिती कॉलेज पेजवर पहा.';
-  // Admission
   if (q.includes('प्रवेश') || q.includes('admission')) return 'प्रवेश प्रक्रियेबद्दल अधिक माहितीसाठी आमच्या सल्लागाराशी संपर्क साधा.';
-  // Address
   if (q.includes('पत्ता') || q.includes('address')) return 'कॉलेजचा पत्ता कॉलेज पेजवर दिला आहे.';
-  // Thanks
   if (q.includes('शुभेच्छा') || q.includes('thanks') || q.includes('धन्यवाद')) return 'आपले स्वागत आहे!';
-  // Commerce
   if (q.includes('commerce') || q.includes('कॉमर्स')) return 'कॉमर्स क्षेत्रासाठी आमच्याकडे B.Com, BBA, आणि इतर कोर्सेस उपलब्ध आहेत. अधिक माहितीसाठी कोर्स यादी पहा.';
-  // Default
   return 'माफ करा, मी तुमचा प्रश्न समजू शकलो नाही. कृपया अधिक स्पष्टपणे विचारा.';
 }
 
 function speakMarathi(msg) {
-  if ('speechSynthesis' in window) {
+  if ('speechSynthesis' in window && msg) {
     window.speechSynthesis.cancel();
     var utter = new SpeechSynthesisUtterance(msg);
     utter.rate = 0.95; utter.pitch = 0.7; utter.volume = 1;
     utter.lang = 'mr-IN';
-    // Try to use a deep male voice if available
-    var voices = window.speechSynthesis.getVoices();
-    for (let v of voices) {
-      if ((v.lang === 'mr-IN' || v.lang.startsWith('en')) && v.name.toLowerCase().includes('male')) {
-        utter.voice = v;
-        break;
-      }
-    }
     window.speechSynthesis.speak(utter);
   }
 }
@@ -106,13 +78,11 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   }
 
-  // Speak greeting on button click
   var speakBtn = document.getElementById('speak-greeting-btn');
   if (speakBtn) {
     speakBtn.onclick = function() { speakMarathi('नमस्कार, आपले स्वागत आहे! मी AdmitionWala Robo आहे. कृपया आपली माहिती द्या.'); };
   }
 
-  // AI-marathi Q&A flow
   const questions = [
     'नमस्कार, आपले स्वागत आहे! मी आपला ॲडमिशन सहाय्यक आहे. तुमचं नाव काय आहे?',
     'तुमची आवड किंवा क्षेत्र सांगा (उदा. अभियांत्रिकी, वैद्यकीय, वाणिज्य)',
@@ -135,12 +105,10 @@ document.addEventListener('DOMContentLoaded', function() {
     input.focus();
   }
 
-  let greeted = false;
   nextBtn.addEventListener('click', function greetFirst() {
-    if (!greeted && step === 0 && answers.length === 0) {
+    if (step === 0 && answers.length === 0) {
       speakMarathi('नमस्कार, आपले स्वागत आहे! मी आपला ॲडमिशन सहाय्यक आहे. कृपया आपली माहिती द्या.');
-      greeted = true;
-      setTimeout(askQuestion, 1800);
+      setTimeout(askQuestion, 600);
       return;
     }
   }, { once: true });
@@ -184,4 +152,5 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 {% endif %}
+
 {% endblock %}

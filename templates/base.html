@@ -31,8 +31,8 @@
 </head>
 <body class="{% if page_background_url %}page-bg-present{% endif %}">
   <a class="skip-link" href="#main-content" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">Skip to content</a>
-  <!-- Default header block; child templates may override {% block header %} -->
-  {% block header %}
+  <!-- Default header block; child templates may override the site_header block -->
+  {% block site_header %}
   <header class="fallback-header" role="banner" aria-hidden="false">
     <div class="logo"><img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:40px"/></div>
     <button class="menu-toggle" aria-label="Open menu" aria-expanded="false">
@@ -45,7 +45,7 @@
       </svg>
     </button>
   </header>
-  {% endblock %}
+  {% endblock site_header %}
   <div id="react-root"></div>
   <!-- React will render the header and background animations into #react-root -->
 

@@ -402,6 +402,60 @@ button:focus, .btn:focus, input[type=submit]:focus{outline:3px solid rgba(255,25
   z-index:2;
 }
 
+/* ===== Mobile header safety & CTA stacking fixes ===== */
+/* Ensure header doesn't overlap content on small screens and CTAs stack vertically */
+@media (max-width: 900px) {
+  :root { --site-header-height: 64px; }
+
+  /* Make header fixed to the top on small screens to avoid reflow issues */
+  header.site-header, .fallback-header {
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: var(--site-header-height) !important;
+    align-items: center !important;
+    padding: 8px 4vw !important;
+    z-index: 10000 !important;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18) !important;
+  }
+
+  /* Give the page content a safe offset so content and CTAs don't sit under the header */
+  main#main-content, .container {
+    padding-top: calc(var(--site-header-height) + 12px) !important;
+  }
+
+  /* Ensure menu toggle is visible and large enough for touch */
+  .menu-toggle, .hamburger {
+    display: inline-flex !important;
+    align-items: center; justify-content: center;
+    width: 48px; height: 48px; padding: 6px; border-radius: 8px;
+    z-index: 10002 !important;
+  }
+
+  /* Hide desktop nav, show overlay toggle */
+  .site-header .main-nav, .header-main .main-nav, .header-right { display: none !important; }
+
+  /* Ensure the overlay menu sits above everything and animates smoothly */
+  .mobile-nav-overlay { z-index: 10003 !important; }
+
+  /* Stack CTAs vertically and make them full-width for easy tapping */
+  .cta-row, .button-group-vertical { flex-direction: column !important; gap: 12px !important; }
+  .cta-row a, .accent-btn, button.accent-btn, a.accent-btn { width: 100% !important; display: block !important; max-width: none !important; }
+
+  /* Slightly reduce hero top padding to compensate for fixed header */
+  .hero { margin-top: 6px !important; }
+}
+
+/* Minor polish for header contrast and legibility on all sizes */
+.site-header, .fallback-header { background: var(--site-medium-yellow) !important; color: var(--site-contrast) !important; }
+.site-header a, .site-header button, .fallback-header a, .fallback-header button { color: var(--site-contrast) !important; }
+
+/* Ensure mobile overlay links are legible and have accessible hit area */
+.mobile-nav-links a { padding: 14px 12px !important; font-size: 1.05rem !important; }
+
+/* ===== end mobile header safety & CTA stacking fixes ===== */
+
 /* Header */
 .topbar{display:flex;justify-content:space-between;align-items:center;padding:8px 6%;background:rgba(10,12,20,0.6);color:#ddd;font-size:0.95em}
 .topbar a{color:var(--accent);text-decoration:none;font-weight:600}
