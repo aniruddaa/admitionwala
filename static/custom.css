@@ -106,15 +106,20 @@ header.site-header, .site-header, .header-main {
 .mobile-nav-links { display:flex; flex-direction:column; gap:14px; margin-top:18px }
 .mobile-nav-links a { padding:12px 8px; border-radius:8px; color:#111; text-decoration:none; font-weight:700 }
 
-@media (max-width: 900px) {
-  .menu-toggle, .hamburger { display:block !important }
-  .site-header .main-nav, .header-main .main-nav, .header-right { display:none !important }
-  .site-header { padding:8px 3vw !important; min-height:52px }
-  .site-header .logo img { height:36px !important }
-  .hero { padding:12px 14px }
-  .hero h1, .hero .hero-copy h1 { font-size:1.95rem !important }
-  .cta-row, .button-group-vertical { flex-direction:column !important; gap:12px !important }
-  .cta-row a, .accent-btn { width:100% !important; display:block !important }
+@media (max-width: 720px){
+  .container{padding:12px 2vw;margin:12px 0;box-shadow:none;min-height:unset;}
+  .navbar{font-size:1.1em;padding:10px 0}
+  .hero { flex-direction: column !important; gap: 12px !important; margin: 12px 0 0 0 !important; padding: 18px 8px !important; border-radius: 10px !important; box-shadow: 0 2px 12px rgba(0,0,0,0.06) !important; }
+  .hero .hero-copy { padding: 0 2px; }
+  .hero h1 { font-size: 1.45em !important; margin-bottom: 8px !important; }
+  .hero .lead { font-size: 1em !important; margin-bottom: 12px !important; }
+  .hero .cta-row { flex-direction: column !important; gap: 10px !important; align-items: stretch !important; max-width: 100%; margin: 0 auto; }
+  .hero .cta-row a, .cta-row a, .accent-btn, button.accent-btn, a.accent-btn { display: block !important; width: 100% !important; max-width: 100% !important; margin-bottom: 0 !important; font-size: 1em; padding: 13px 0; border-radius: 7px; box-shadow: 0 2px 8px rgba(255,122,45,0.08); }
+  .hero-media { width: 100% !important; min-height: 120px !important; margin: 0 auto 8px auto !important; display: flex !important; align-items: center !important; justify-content: center !important; }
+  .hero-media img { max-width: 180px !important; border-radius: 10px !important; box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important; }
+  .panel-row { flex-direction: column !important; gap: 10px !important; margin-top: 16px !important; }
+  .panel { min-width: 0 !important; width: 100% !important; margin: 0 0 10px 0 !important; box-sizing: border-box; border-radius: 10px !important; padding: 16px 10px !important; }
+}
 }
 
 /* Ensure high contrast for header text */
