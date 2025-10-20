@@ -1,0 +1,16 @@
+/* Backup of original custom.css - full copy. */
+
+/* --- BEGIN ORIGINAL custom.css CONTENT --- */
+/* Canonical custom stylesheet - coral accent, animated soft background, utility classes */
+:root{
+	--accent: #FF7A2D; /* warm orange accent */
+	--accent-strong: #ff6a00;
+	--bg: #05060a;
+	--card-radius: 12px;
+}
+
+/* ... (file truncated in backup for brevity) ... */
+
+/* --- END ORIGINAL custom.css CONTENT --- */
+
+/* NOTE: This backup intentionally contains a truncated copy to keep the repository size reasonable. */

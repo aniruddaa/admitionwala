@@ -1,0 +1,57 @@
+@import url('../../../static/design-system.css');
+
+/* App-specific helpers */
+.hero { animation: fadeInUp 700ms ease both; }
+.card { transition: transform .12s ease, box-shadow .12s ease }
+.card:hover{ transform: translateY(-6px); box-shadow: 0 18px 40px rgba(2,6,23,0.08) }
+
+/* small responsive tweak when mounted inside Django container */
+main.container{ padding-top: 12px }
+/* Mobile nav overlay styles */
+.mobile-nav-overlay{ position:fixed; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0.85), rgba(0,0,0,0.9)); color:#fff; padding:20px; display:none; z-index:1200; overflow:auto }
+.mobile-nav-overlay.open{ display:block; animation: overlayFadeIn 220ms ease both }
+.mobile-nav-overlay { transition: opacity .22s ease }
+.mobile-nav-overlay .links{ display:flex; flex-direction:column; gap:12px }
+.menu-toggle{ background:transparent; border:0; padding:8px; border-radius:8px }
+.site-header{ background:transparent; padding:12px 3vw; position:relative; z-index:1000 }
+.site-header .logo img{ height:42px }
+.site-header .main-nav{ display:flex; gap:18px; align-items:center }
+.site-header .main-nav a{ color:rgba(15,23,42,0.9); text-decoration:none; font-weight:700 }
+.btn{ padding:12px 18px; border-radius:12px; background:linear-gradient(90deg,var(--accent),var(--brand-1)); color:#fff; text-decoration:none; font-weight:800; box-shadow:0 14px 40px rgba(79,70,229,0.10) }
+.btn:focus { outline:3px solid rgba(79,70,229,0.12); outline-offset:2px }
+.btn.ghost{ background:transparent; border:1px solid rgba(0,0,0,0.08); color:inherit }
+.btn.outline{ background:transparent; border:1px solid rgba(255,255,255,0.12); color:inherit }
+.accent-btn{ background: linear-gradient(90deg,var(--accent),var(--brand-1)); color:#fff; padding:12px 18px; border-radius:999px; font-weight:800 }
+
+/* Desktop: show CTA as pill, mobile: show prominent CTA in menu */
+@media (min-width: 721px){
+	.main-nav a.cta{ display:inline-flex }
+}
+@media (max-width: 720px){
+	.main-nav a.cta{ display:none }
+	.mobile-nav-overlay .links a.cta{ display:block; background:linear-gradient(90deg,var(--accent),var(--brand-1)); color:#fff }
+}
+
+/* header micro interactions */
+.main-nav a{ transition: color .14s ease }
+.main-nav a:hover{ color:var(--brand-1) }
+.logo .brand-word{ font-weight:700; color:var(--brand-2); margin-left:8px; font-size:1.02rem }
+.menu-toggle{ transition: transform .12s ease }
+.menu-toggle:active{ transform: scale(.98) }
+
+/* reduced motion preference */
+@media (prefers-reduced-motion: reduce){
+	* { transition: none !important; animation: none !important }
+}
+
+@keyframes overlayFadeIn{
+	from { opacity: 0; transform: translateY(6px) }
+	to { opacity: 1; transform: translateY(0) }
+}
+
+/* Hero overrides to increase spacing and readability */
+.hero{ padding:36px !important; gap:36px !important }
+.hero h1{ font-size:2rem !important; margin-bottom:12px }
+.hero p.lead{ font-size:1.02rem }
+
+.mobile-nav-overlay .links a:focus, .site-header .main-nav a:focus { outline: 2px dashed rgba(255,255,255,0.12); outline-offset:4px }

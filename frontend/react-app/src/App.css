@@ -142,3 +142,36 @@
   color: #888;
   margin-top: 4px;
 }
+
+/* New header styles to match design */
+.site-header {
+  background: var(--site-medium-yellow, #FFCB00);
+  color: var(--site-contrast, #111);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 10px 4vw;
+  position: sticky;
+  top: 0;
+  z-index: 10000;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.12);
+}
+.site-header .logo img{ height:42px }
+.site-header .main-nav{ display:flex; gap:18px; align-items:center }
+.site-header .main-nav a{ color:var(--site-contrast, #111); text-decoration:none; font-weight:700 }
+.header-actions .accent-btn{ background: linear-gradient(180deg,#FF8A00,#FF6A00); color:#fff; padding:8px 14px; border-radius:8px; }
+
+/* Mobile behaviour */
+@media (max-width:900px){
+  .site-header { padding:12px 3vw; }
+  .site-header .main-nav, .header-actions { display:none }
+  .menu-toggle { display:inline-flex; width:48px; height:48px; align-items:center; justify-content:center; }
+  .main-content { padding-top:74px; }
+  .button-group-vertical { width:100%; max-width:520px; margin: 12px auto; }
+}
+
+@media (min-width:901px){
+  .button-group-vertical { display:flex; gap:18px; justify-content:center }
+  .button-orange { max-width:240px }
+}

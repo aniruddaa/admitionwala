@@ -1,46 +1,33 @@
+import React from 'react'
+import Header from './components/Header'
+import Footer from './components/Footer'
+import Home from './pages/Home'
 
-import React, { useEffect } from 'react';
-import './App.css';
+const DJANGO = typeof window !== 'undefined' && window.__DJANGO__ ? window.__DJANGO__ : { user_authenticated: false, page_background_url: null, static_college_logo: '/static/college_logo.svg' }
 
-export default function App() {
-  const dj = window.__DJANGO__ || {};
-  useEffect(() => {
-    if (dj.page_background_url) document.documentElement.style.setProperty('--page-bg-url', `url('${dj.page_background_url}')`);
-  }, [dj.page_background_url]);
+export default function App(){
+  // If the server rendered a .site-header or main content, avoid duplicating it.
+  const hasServerHeader = typeof document !== 'undefined' && !!document.querySelector('.site-header')
+  const mainEl = typeof document !== 'undefined' && document.getElementById('main-content')
+  const hasServerMain = mainEl && mainEl.innerHTML && mainEl.innerHTML.trim().length > 0
 
   return (
-    <div className="app-root">
-      <header className="site-header">
-        <div className="logo">
-          <img src="/static/images/admitionwala_logo.svg" alt="AdmitionWala" />
-        </div>
-        <button className="menu-toggle" aria-label="Open menu" aria-expanded="false">
-          <svg viewBox="0 0 24 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <g stroke="currentColor" strokeWidth="2" strokeLinecap="round">
-              <path className="bar-top" d="M2 3h20" />
-              <path className="bar-mid" d="M2 9h20" />
-              <path className="bar-bot" d="M2 15h20" />
-            </g>
-          </svg>
-        </button>
-      </header>
-      <main className="main-content">
-        <h1 className="hero-title">Find. Match. Apply.</h1>
-        <p className="hero-desc">
-          Guiding students and parents to find the right college. Building a better future, one student at a time.
-        </p>
-        <div className="cta-row">
-          <a href="#explore" className="accent-btn">Explore Colleges</a>
-          <a href="#apply" className="accent-btn">Apply Now</a>
-          <a href="#courses" className="accent-btn">Our Certified Courses</a>
-        </div>
-        <section className="about-section">
-          <h2 className="about-title">About Us</h2>
-          <div className="about-avatar">Counsel</div>
-          <div className="about-brand">ADMITIONWALA</div>
-          <div className="about-desc">Innovating Online Learning</div>
-        </section>
-      </main>
+    <div>
+      {/* Only render Header if the template didn't provide one. */}
+      {!hasServerHeader && <Header userAuthenticated={DJANGO.user_authenticated} pageBackground={DJANGO.page_background_url} />}
+
+      {/* If server already rendered main content (e.g., /exams/), don't render the React Home page to avoid overwriting admin-provided features. */}
+      {!hasServerMain && (
+        <>
+          <div style={{paddingTop: '12px'}} />
+          <main className="container">
+            <Home />
+          </main>
+        </>
+      )}
+
+      {/* Footer: if server included a footer element leave it alone; otherwise render React footer. */}
+      {!document.querySelector('footer') && <Footer />}
     </div>
-  );
+  )
 }
