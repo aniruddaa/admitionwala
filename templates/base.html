@@ -169,19 +169,21 @@
         <span></span>
       </button>
       <nav class="main-nav" id="main-nav">
-        <a href="/colleges/">Colleges</a>
-        <a href="/apply/">Apply</a>
-        <a href="/exams/">Exams</a>
-        <a href="/admition-counseling/">Counseling</a>
-        <a href="/news/">News</a>
-        <a href="/login/">Login</a>
+        <ul>
+          <li><a href="/colleges/">Colleges</a></li>
+          <li><a href="/apply/">Apply</a></li>
+          <li><a href="/exams/">Exams</a></li>
+          <li><a href="/admition-counseling/">Counseling</a></li>
+          <li><a href="/news/">News</a></li>
+          <li><a href="/login/">Login</a></li>
+        </ul>
       </nav>
     </div>
   </header>
   <script>
     $(function() {
       var $hamburger = $('.hamburger');
-      var $nav = $('.main-nav');
+      var $nav = $('.main-nav ul');
       $hamburger.on('click', function() {
         $nav.toggleClass('open');
         var expanded = $nav.hasClass('open');
@@ -189,14 +191,14 @@
       });
       // Close nav on link click (mobile)
       $nav.find('a').on('click', function() {
-        if (window.innerWidth <= 700) {
+        if (window.innerWidth <= 900) {
           $nav.removeClass('open');
           $hamburger.attr('aria-expanded', 'false');
         }
       });
       // Hide nav if window resized to desktop
       $(window).on('resize', function() {
-        if (window.innerWidth > 700) {
+        if (window.innerWidth > 900) {
           $nav.removeClass('open');
           $hamburger.attr('aria-expanded', 'false');
         }

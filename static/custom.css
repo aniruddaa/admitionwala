@@ -348,16 +348,46 @@ button:hover, .btn:hover, input[type=submit]:hover, .button:hover{transform: tra
 
 /* Responsive */
 @media (max-width:900px){
-  .main-nav ul{display:none;position:fixed;inset:64px 0 0 0;background:#050617cc;flex-direction:column;padding:18px}
-  body.menu-open .main-nav ul{display:flex}
-  .hamburger{display:block}
+  .main-nav ul {
+    display: none;
+    position: fixed;
+    top: 54px;
+    left: 0;
+    right: 0;
+    background: #fff;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding: 0.5rem 1.2rem 0.7rem 1.2rem;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+    z-index: 10001;
+  }
+  .main-nav ul.open {
+    display: flex;
+  }
+  .main-nav ul li a {
+    padding: 10px 0;
+    font-size: 1.05rem;
+    width: 100%;
+    border-bottom: 1px solid #f1f5f9;
+    color: #222 !important;
+    font-weight: 700;
+  }
+  .hamburger {
+    display: block !important;
+  }
   .header-search input{min-width:120px}
 }
 
 @media (max-width:720px){
-  .container{padding:20px 12px;margin:22px 12px}
-  .hero{flex-direction:column;padding:0 18px}
-  .hero h1{font-size:2.2em}
+  .container{
+    padding: 10px 4px !important;
+    margin: 10px 0 !important;
+    min-width: 0 !important;
+    box-shadow: none !important;
+  }
+  .hero{flex-direction:column;padding:0 8px}
+  .hero h1{font-size:1.4em}
 }
 
 /* Accessibility focus states */
