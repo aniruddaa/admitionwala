@@ -1,3 +1,41 @@
+/* White rounded bar inside yellow header for logo and hamburger */
+.header-whitebar {
+  background: #fff;
+  border-radius: 0 0 18px 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 340px;
+  margin: 0 auto;
+  padding: 7px 16px 7px 10px;
+  position: relative;
+  top: 12px;
+  min-height: 44px;
+  z-index: 10;
+}
+.header-whitebar .logo img {
+  height: 28px !important;
+  width: auto;
+  display: block;
+}
+.header-whitebar .logo span {
+  display: none;
+}
+.header-whitebar .hamburger {
+  margin-left: 0;
+  padding: 6px;
+}
+@media (max-width: 500px) {
+  .header-whitebar {
+    max-width: 96vw;
+    padding: 6px 8px 6px 6px;
+    min-height: 38px;
+  }
+  .header-whitebar .logo img {
+    height: 22px !important;
+  }
+}
 /* Canonical custom stylesheet - coral accent, animated soft background, utility classes */
 :root{
   --accent: #FF7A2D; /* warm orange accent */
