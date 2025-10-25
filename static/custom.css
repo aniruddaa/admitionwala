@@ -74,37 +74,93 @@ body.page-bg-present .container{
   color: #111 !important;
 }
 
-/* ===== OVERRIDE: Unified header + mobile nav (high specificity, placed at EOF) ===== */
+
+/* ===== CollegeDekho-style sticky header and mobile overlay nav ===== */
 :root{ --site-medium-yellow: #FFCB00; --site-contrast: #111 }
 
-header.site-header, .site-header, .header-main {
+header.site-header, .site-header {
   background: var(--site-medium-yellow) !important;
   color: var(--site-contrast) !important;
   position: sticky !important;
   top: 0 !important;
   left: 0; right: 0;
   z-index: 9999 !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  padding: 8px 4vw !important;
+  width: 100%;
   box-shadow: 0 6px 28px rgba(0,0,0,0.12) !important;
 }
 
-.site-header .logo img, .header-main .logo img { height:42px !important; width:auto !important }
-.site-header .brand, .header-main .brand { color:var(--site-contrast) !important; font-weight:800 }
+.site-header .logo img { height:32px !important; width:auto !important }
+.site-header .logo span { color:var(--site-contrast) !important; font-weight:800; font-size:1.1rem; letter-spacing:0.5px; }
 
-.site-header .main-nav, .header-main .main-nav { display:flex !important; gap:18px; align-items:center }
-.site-header .main-nav a, .header-main .main-nav a { color:var(--site-contrast) !important; font-weight:700 }
+.desktop-nav { display: flex !important; align-items: center; justify-content: flex-end; }
+.desktop-nav ul { display: flex; gap: 1.1rem; margin: 0; padding: 0; list-style: none; }
+.desktop-nav ul li a { color: var(--site-contrast) !important; font-weight: 700; text-decoration: none; font-size: 1rem; padding: 2px 0; transition: color 0.2s; }
+.desktop-nav ul li a:hover, .desktop-nav ul li a:focus { color: #6366f1; text-decoration: underline; }
 
-.menu-toggle, .hamburger { display:none; background:none; border:none; font-size:1.8rem; color:var(--site-contrast); cursor:pointer }
+.hamburger { display: none; background: none; border: none; padding: 8px; margin-left: 10px; cursor: pointer; }
+.hamburger svg { display: block; }
 
-/* Mobile overlay */
-.mobile-nav-overlay { display:none }
-.mobile-nav-overlay.open { display:flex; position:fixed; inset:0; background:#fff; color:#111; z-index:10001; flex-direction:column; padding:16px; }
-.mobile-nav-header { display:flex; align-items:center; justify-content:space-between }
-.mobile-nav-links { display:flex; flex-direction:column; gap:14px; margin-top:18px }
-.mobile-nav-links a { padding:12px 8px; border-radius:8px; color:#111; text-decoration:none; font-weight:700 }
+/* Mobile overlay nav */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #fff;
+  color: #111;
+  z-index: 10001;
+  flex-direction: column;
+  padding: 0 0 0 0;
+  transition: opacity 0.18s, transform 0.18s;
+  opacity: 0;
+  pointer-events: none;
+}
+.mobile-nav-overlay.open {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+}
+.mobile-nav-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 18px 0 18px;
+  background: var(--site-medium-yellow);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+.mobile-nav-header .logo img { height: 32px !important; }
+.mobile-nav-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  padding: 18px 18px 0 18px;
+}
+.mobile-nav-links a {
+  padding: 16px 0;
+  border-bottom: 1px solid #f1f5f9;
+  color: #222 !important;
+  font-size: 1.12rem;
+  font-weight: 700;
+  text-decoration: none;
+  width: 100%;
+  background: none;
+  text-align: left;
+}
+.mobile-nav-links a:last-child { border-bottom: none; }
+.mobile-nav-links a:active, .mobile-nav-links a:focus { background: #f7e7b7; }
+
+@media (max-width: 900px) {
+  .desktop-nav { display: none !important; }
+  .hamburger { display: block !important; }
+  .mobile-nav-overlay { display: none; }
+  .mobile-nav-overlay.open { display: flex; }
+}
+
+@media (min-width: 901px) {
+  .mobile-nav-overlay { display: none !important; }
+  .hamburger { display: none !important; }
+  .desktop-nav { display: flex !important; }
+}
 
 @media (max-width: 720px){
   .container{padding:12px 2vw;margin:12px 0;box-shadow:none;min-height:unset;}
