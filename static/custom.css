@@ -6,13 +6,15 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  max-width: 340px;
+  min-width: 90vw;
+  max-width: 420px;
   margin: 0 auto;
-  padding: 7px 16px 7px 10px;
+  padding: 7px 28px 7px 10px;
   position: relative;
   top: 12px;
   min-height: 44px;
   z-index: 10;
+  transition: max-width 0.2s, min-width 0.2s, padding 0.2s;
 }
 .header-whitebar .logo img {
   height: 28px !important;
@@ -28,8 +30,9 @@
 }
 @media (max-width: 500px) {
   .header-whitebar {
-    max-width: 96vw;
-    padding: 6px 8px 6px 6px;
+    min-width: 98vw;
+    max-width: 99vw;
+    padding: 6px 16px 6px 6px;
     min-height: 38px;
   }
   .header-whitebar .logo img {
