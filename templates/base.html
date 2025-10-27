@@ -158,9 +158,9 @@
 </head>
 <body>
   <header class="site-header">
-    <div class="header-whitebar">
+    <div class="header-inner" style="display:flex;align-items:center;justify-content:space-between;min-height:54px;max-width:420px;margin:0 auto;padding:7px 10px;">
       <a href="/" class="logo">
-        <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala">
+        <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:28px;width:auto;">
       </a>
       <button class="hamburger" id="menu-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-nav">
         <svg width="28" height="28" viewBox="0 0 28 28"><rect y="6" width="28" height="3" rx="1.5"/><rect y="13" width="28" height="3" rx="1.5"/><rect y="20" width="28" height="3" rx="1.5"/></svg>
@@ -227,6 +227,20 @@
     });
   </script>
   <main id="main-content" class="container animated fadeInUp">
+    <section class="hero animated fadeInDown">
+      <div class="hero-copy">
+        <h1>Find. Match. Apply.</h1>
+        <p class="lead">Guiding students and parents to find the right college. Building a better future, one student at a time.</p>
+        <div class="cta-row cta-row-horizontal">
+          <a href="/colleges/" class="accent-btn">Explore Colleges</a>
+          <a href="/apply/" class="accent-btn">Apply Now</a>
+          <a href="/courses/" class="accent-btn">Our Certified Courses</a>
+        </div>
+      </div>
+      <div class="hero-media">
+        <img src="{% static 'images/admitionwala_logo.svg' %}" alt="ADMITIONWALA" style="max-width:120px;border-radius:12px;">
+      </div>
+    </section>
     {% block content %}{% endblock %}
   </main>
   <footer class="footer">

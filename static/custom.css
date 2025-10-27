@@ -1,42 +1,31 @@
-/* White rounded bar inside yellow header for logo and hamburger */
-.header-whitebar {
-  background: #fff;
-  border-radius: 0 0 18px 18px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+
+/* Horizontal CTA row for hero section */
+.cta-row-horizontal {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-width: 90vw;
-  max-width: 420px;
-  margin: 0 auto;
-  padding: 7px 28px 7px 10px;
-  position: relative;
-  top: 12px;
-  min-height: 44px;
-  z-index: 10;
-  transition: max-width 0.2s, min-width 0.2s, padding 0.2s;
+  flex-direction: row;
+  gap: 12px;
+  margin: 18px 0 0 0;
+  justify-content: flex-start;
+  align-items: stretch;
 }
-.header-whitebar .logo img {
-  height: 28px !important;
-  width: auto;
-  display: block;
+.cta-row-horizontal .accent-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: 1.05rem;
+  padding: 13px 0;
+  border-radius: 7px;
+  margin-bottom: 0;
 }
-.header-whitebar .logo span {
-  display: none;
-}
-.header-whitebar .hamburger {
-  margin-left: 0;
-  padding: 6px;
-}
-@media (max-width: 500px) {
-  .header-whitebar {
-    min-width: 98vw;
-    max-width: 99vw;
-    padding: 6px 16px 6px 6px;
-    min-height: 38px;
+@media (max-width: 700px) {
+  .cta-row-horizontal {
+    flex-direction: column;
+    gap: 10px;
   }
-  .header-whitebar .logo img {
-    height: 22px !important;
+  .cta-row-horizontal .accent-btn {
+    width: 100%;
+    font-size: 1em;
+    padding: 12px 0;
   }
 }
 /* Canonical custom stylesheet - coral accent, animated soft background, utility classes */
