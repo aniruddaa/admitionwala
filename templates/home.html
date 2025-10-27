@@ -10,35 +10,21 @@
 {% endblock %}
 
 {% block content %}
-  <section class="hero animated fadeInDown">
-    <div class="hero-copy">
-      <h1>Find. Match. Apply.</h1>
-      <p class="lead">Guiding students and parents to find the right college. Building a better future, one student at a time.</p>
-      <div class="cta-row">
-        <a href="/colleges/" class="accent-btn">Explore Colleges</a>
-        <a href="/apply/" class="accent-btn">Apply Now</a>
-        <a href="/exams/" class="accent-btn">Our Certified Courses</a>
-      </div>
-    </div>
-    <div class="hero-media">
-      <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala">
-    </div>
-  </section>
   <section class="panel-row animated fadeInUp">
-  <div class="panel">
-  <h2 class="accent-text">Find Your College</h2>
+    <div class="panel">
+      <h2 class="accent-text">Find Your College</h2>
       <p>Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
-  <a href="/colleges/" class="accent-btn" style="margin-top:1rem;">Search Colleges</a>
+      <a href="/colleges/" class="accent-btn" style="margin-top:1rem;">Search Colleges</a>
     </div>
-  <div class="panel">
-  <h2 class="accent-text">Admition Counseling (Marathi)</h2>
+    <div class="panel">
+      <h2 class="accent-text">Admition Counseling (Marathi)</h2>
       <p>रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
-  <a href="/admition-counseling/" class="accent-btn" style="margin-top:1rem;">Start Counseling</a>
+      <a href="/admition-counseling/" class="accent-btn" style="margin-top:1rem;">Start Counseling</a>
     </div>
-  <div class="panel">
-  <h2 class="accent-text">Latest News</h2>
+    <div class="panel">
+      <h2 class="accent-text">Latest News</h2>
       <p>Stay updated with the latest news, trends, and tips in education and admissions.</p>
-  <a href="/news/" class="accent-btn" style="margin-top:1rem;">View News</a>
+      <a href="/news/" class="accent-btn" style="margin-top:1rem;">View News</a>
     </div>
   </section>
   <script>
@@ -56,8 +42,6 @@
       if (!isAuth) {
         speakMarathi('नमस्कार, आपले स्वागत आहे! कृपया ॲडमिशन काउंसलिंगसाठी पुढे जा.');
       }
-      // Animate hero and panels
-      $('.hero').addClass('animated fadeInDown');
       $('.panel-row').addClass('animated fadeInUp');
     });
   </script>
