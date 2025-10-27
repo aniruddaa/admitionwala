@@ -915,6 +915,8 @@ body{
 
 
 /* Animated background blobs - single canonical version */
+
+/* Full-page background image for the site */
 .bg-animations {
   position: fixed;
   inset: 0;
@@ -922,13 +924,14 @@ body{
   pointer-events: none;
   width: 100vw;
   height: 100vh;
-  background-image:
+  background: url('/static/images/bg-hero.jpg') center center/cover no-repeat, 
     radial-gradient(circle at 10% 20%, rgba(255,212,64,0.14) 0 120px, transparent 121px),
     radial-gradient(circle at 85% 10%, rgba(255,240,120,0.10) 0 180px, transparent 181px),
     radial-gradient(circle at 40% 80%, rgba(255,200,40,0.08) 0 220px, transparent 221px),
     radial-gradient(circle at 70% 60%, rgba(255,230,120,0.06) 0 360px, transparent 361px);
+  background-blend-mode: lighten;
   background-repeat: no-repeat;
-  filter: blur(40px) saturate(120%);
+  filter: blur(0px) saturate(120%);
   transform: translateZ(0);
   animation: floatBlobs 32s linear infinite;
 }
