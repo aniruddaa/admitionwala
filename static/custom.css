@@ -913,29 +913,32 @@ body{
   overflow-x:hidden;
 }
 
-/* Animated background blobs */
-.bg-animations{
-  position:fixed;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
+
+/* Animated background blobs - single canonical version */
+.bg-animations {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  width: 100vw;
+  height: 100vh;
   background-image:
     radial-gradient(circle at 10% 20%, rgba(255,212,64,0.14) 0 120px, transparent 121px),
     radial-gradient(circle at 85% 10%, rgba(255,240,120,0.10) 0 180px, transparent 181px),
     radial-gradient(circle at 40% 80%, rgba(255,200,40,0.08) 0 220px, transparent 221px),
     radial-gradient(circle at 70% 60%, rgba(255,230,120,0.06) 0 360px, transparent 361px);
-  background-repeat:no-repeat;
+  background-repeat: no-repeat;
   filter: blur(40px) saturate(120%);
   transform: translateZ(0);
-  animation: floatBlobs 28s linear infinite;
+  animation: floatBlobs 32s linear infinite;
 }
 
-@keyframes floatBlobs{
-  0% {background-position: 0 0, 0 0, 0 0, 0 0;}
-  25% {background-position: 20% 10%, -10% 5%, 5% -10%, -5% 15%;}
-  50% {background-position: -10% 20%, 10% -5%, -20% 10%, 10% -20%;}
-  75% {background-position: 5% -10%, 30% 20%, 15% -5%, -10% 5%;}
-  100% {background-position: 0 0, 0 0, 0 0, 0 0;}
+@keyframes floatBlobs {
+  0% { background-position: 0 0, 0 0, 0 0, 0 0; }
+  25% { background-position: 20% 10%, -10% 5%, 5% -10%, -5% 15%; }
+  50% { background-position: -10% 20%, 10% -5%, -20% 10%, 10% -20%; }
+  75% { background-position: 5% -10%, 30% 20%, 15% -5%, -10% 5%; }
+  100% { background-position: 0 0, 0 0, 0 0, 0 0; }
 }
 
 /* Site container - dark themed */
