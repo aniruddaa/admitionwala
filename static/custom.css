@@ -1,4 +1,142 @@
 
+/* Hero and button polish */
+.hero {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 12px 14px 12px;
+  background: rgba(255,255,255,0.96) !important;
+  border-radius: 14px;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.10);
+  border: 1.5px solid #f3e7c7;
+  backdrop-filter: blur(1.2px) saturate(1.03);
+  margin-bottom: 12px;
+}
+.hero-copy h1 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: 0.4rem;
+  letter-spacing: -0.5px;
+}
+.hero-copy .lead {
+  font-size: 1.01rem;
+  color: #222;
+  margin-bottom: 0.8rem;
+  flex: 1 1 320px;
+  min-width: 260px;
+}
+.hero-media {
+  flex: 0 0 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.hero-media img {
+  max-width: 120px;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.cta-row-horizontal {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  margin: 8px 0 0 0;
+  justify-content: flex-start;
+  align-items: stretch;
+}
+.cta-row-horizontal .accent-btn {
+  flex: 1 1 0;
+  min-width: 0;
+  text-align: center;
+  font-size: 1.13rem;
+  padding: 16px 0;
+  border-radius: 10px;
+  margin-bottom: 0;
+  background: linear-gradient(90deg, #ffb347 0%, #ff6a00 100%) !important;
+  color: #fff !important;
+  font-weight: 800;
+  box-shadow: 0 2px 12px rgba(255,106,0,0.10);
+  border: none;
+  transition: transform 0.13s, box-shadow 0.13s;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  margin-top: 0;
+}
+.cta-row-horizontal .accent-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(255,106,0,0.18);
+  background: linear-gradient(90deg, #ff6a00 0%, #ffb347 100%) !important;
+  color: #fff !important;
+}
+@media (max-width: 900px) {
+  .hero { flex-direction: column; gap: 8px; padding: 8px 2px 8px 2px; margin-bottom: 6px; }
+  .hero-media { margin: 0 auto; }
+  .cta-row-horizontal { flex-direction: column; gap: 8px; }
+  .cta-row-horizontal .accent-btn {
+    width: 100%;
+    font-size: 1em;
+    padding: 12px 0;
+    border-radius: 8px;
+    margin-top: 0;
+  }
+}
+/* Make header login button highly visible */
+.header-right .accent-btn {
+  background: linear-gradient(90deg, #222 0%, #444 100%) !important;
+  color: #fff !important;
+  font-weight: 800;
+  border-radius: 18px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+  padding: 7px 18px;
+  font-size: 1em;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.10);
+  border: none;
+  transition: background 0.18s, color 0.18s;
+}
+.header-right .accent-btn:hover {
+  background: linear-gradient(90deg, #444 0%, #222 100%) !important;
+  color: #fff !important;
+}
+/* Profile avatar and username in header */
+.profile-link {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  padding: 2px 8px;
+  border-radius: 18px;
+  transition: background 0.15s;
+}
+.profile-link:hover {
+  background: #f7f7f7;
+}
+.profile-link img {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  object-fit: cover;
+  background: #eee;
+  border: 1.5px solid #f1f1f1;
+}
+.profile-link span {
+  font-weight: 600;
+  color: #222;
+  font-size: 1.05em;
+}
+@media (max-width: 900px) {
+  .header-right .profile-link span {
+    display: none;
+  }
+  .header-right .profile-link img {
+    width: 28px;
+    height: 28px;
+  }
+}
+
 /* Horizontal CTA row for hero section */
 .cta-row-horizontal {
   display: flex;
@@ -59,21 +197,18 @@
  }
 
  /* Animated background blobs */
- .bg-animations{
-   position:fixed;
-   inset:0;
-   z-index:0;
-   pointer-events:none;
-   background-image:
-     radial-gradient(circle at 10% 20%, rgba(255,212,64,0.14) 0 120px, transparent 121px),
-     radial-gradient(circle at 85% 10%, rgba(255,240,120,0.10) 0 180px, transparent 181px),
-     radial-gradient(circle at 40% 80%, rgba(255,200,40,0.08) 0 220px, transparent 221px),
-     radial-gradient(circle at 70% 60%, rgba(255,230,120,0.06) 0 360px, transparent 361px);
-   background-repeat:no-repeat;
-   filter: blur(40px) saturate(120%);
-   transform: translateZ(0);
-   animation: floatBlobs 28s linear infinite;
- }
+.bg-animations {
+  position: fixed;
+  top: 0; left: 0; width: 100vw; height: 100vh;
+  z-index: -2;
+  background: url('/static/images/bg-hero.jpg') center center/cover no-repeat;
+  animation: bgFadeIn 1.5s;
+  filter: brightness(1.08) blur(3.5px) saturate(1.25) contrast(1.12);
+  opacity: 0.98;
+}
+  /* radial-gradient(circle at 40% 80%, rgba(255,200,40,0.08) 0 220px, transparent 221px), */
+  /* radial-gradient(circle at 70% 60%, rgba(255,230,120,0.06) 0 360px, transparent 361px); */
+
 
  @keyframes floatBlobs{
    0% {background-position: 0 0, 0 0, 0 0, 0 0;}
@@ -96,7 +231,7 @@
   overflow:hidden;
   position:relative;
   z-index:2;
-}
+
 
 /* When a page provides a specific background image for a college page, switch the container to white/light mode */
 body.page-bg-present .container{
@@ -109,14 +244,16 @@ body.page-bg-present .container{
 :root{ --site-medium-yellow: #FFCB00; --site-contrast: #111 }
 
 header.site-header, .site-header {
-  background: var(--site-medium-yellow) !important;
-  color: var(--site-contrast) !important;
-  position: sticky !important;
-  top: 0 !important;
+  background: linear-gradient(90deg, #fffbe7 0%, #fff 100%);
+  color: var(--site-contrast);
+  position: sticky;
+  top: 0;
   left: 0; right: 0;
-  z-index: 9999 !important;
+  z-index: 9999;
   width: 100%;
-  box-shadow: 0 6px 28px rgba(0,0,0,0.12) !important;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border-bottom: 1.5px solid #ffe6a1;
+  transition: box-shadow 0.18s, background 0.18s;
 }
 
 .site-header .logo img { height:32px !important; width:auto !important }
@@ -924,16 +1061,73 @@ body{
   pointer-events: none;
   width: 100vw;
   height: 100vh;
-  background: url('https://images.unsplash.com/photo-1606761568499-6d2451b23c66?ixlib=rb-4.1.0&auto=format&fit=crop&w=1200&q=80') center center/cover no-repeat, 
-    radial-gradient(circle at 10% 20%, rgba(255,212,64,0.14) 0 120px, transparent 121px),
-    radial-gradient(circle at 85% 10%, rgba(255,240,120,0.10) 0 180px, transparent 181px),
-    radial-gradient(circle at 40% 80%, rgba(255,200,40,0.08) 0 220px, transparent 221px),
-    radial-gradient(circle at 70% 60%, rgba(255,230,120,0.06) 0 360px, transparent 361px);
-  background-blend-mode: lighten;
-  background-repeat: no-repeat;
-  filter: blur(0px) saturate(120%);
+  background: linear-gradient(rgba(20,20,40,0.55), rgba(0,0,0,0.25)),
+  url('/static/images/bg-hero.jpg') center center/cover no-repeat;
+  background-blend-mode: darken, lighten;
+  filter: blur(2.5px) saturate(120%);
   transform: translateZ(0);
   animation: floatBlobs 32s linear infinite;
+  transition: filter 0.3s, background 0.3s;
+}
+
+.container, .panel, .hero {
+  background: rgba(255,255,255,0.98) !important;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.13);
+  backdrop-filter: blur(0.5px);
+}
+
+.hero h1, .hero p.lead, .panel, .card {
+  color: #181818 !important;
+}
+
+.cta-row-horizontal .accent-btn {
+  background: linear-gradient(90deg, #ffb347 0%, #ff6a00 100%) !important;
+  color: #181818 !important;
+  font-weight: 800;
+  box-shadow: 0 2px 12px rgba(255,106,0,0.08);
+  border: none;
+  transition: transform 0.13s, box-shadow 0.13s;
+}
+.cta-row-horizontal .accent-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 8px 32px rgba(255,106,0,0.18);
+  background: linear-gradient(90deg, #ff6a00 0%, #ffb347 100%) !important;
+}
+
+@media (max-width: 900px) {
+  .container, .panel, .hero {
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.99) !important;
+  }
+  .hero h1 {
+    font-size: 2em !important;
+  }
+  .cta-row-horizontal {
+    gap: 10px;
+  }
+}
+
+.container, .panel, .hero {
+  background: rgba(255,255,255,0.97) !important;
+  border-radius: 18px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.10);
+}
+
+.hero h1, .hero p.lead, .panel, .card {
+  color: #181818 !important;
+}
+
+@media (max-width: 900px) {
+  .container, .panel, .hero {
+    border-radius: 10px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+    background: rgba(255,255,255,0.98) !important;
+  }
+  .hero h1 {
+    font-size: 2em !important;
+  }
 }
 
 @keyframes floatBlobs {

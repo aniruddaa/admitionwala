@@ -10,21 +10,20 @@
 {% endblock %}
 
 {% block content %}
-  <section class="panel-row animated fadeInUp">
-    <div class="panel">
-      <h2 class="accent-text">Find Your College</h2>
-      <p>Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
-      <a href="/colleges/" class="accent-btn" style="margin-top:1rem;">Search Colleges</a>
-    </div>
-    <div class="panel">
-      <h2 class="accent-text">Admition Counseling (Marathi)</h2>
-      <p>रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
-      <a href="/admition-counseling/" class="accent-btn" style="margin-top:1rem;">Start Counseling</a>
-    </div>
-    <div class="panel">
-      <h2 class="accent-text">Latest News</h2>
-      <p>Stay updated with the latest news, trends, and tips in education and admissions.</p>
-      <a href="/news/" class="accent-btn" style="margin-top:1rem;">View News</a>
+  <section class="home-hero-panel" style="max-width:900px;margin:48px auto 0 auto;background:rgba(255,255,255,0.92);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:40px 32px;position:relative;overflow:hidden;">
+    <div class="home-bg-image" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.35;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
+    <div style="position:relative;z-index:1;">
+      <h2 class="accent-text" style="font-size:2.2em;font-weight:900;margin-bottom:0.6em;color:#222;background:#fff;padding:0.2em 0.6em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Find Your College</h2>
+      <p style="font-size:1.15em;color:#222;margin-bottom:1.2em;">Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
+      <a href="/colleges/" class="btn" style="margin-bottom:1.5em;">Search Colleges</a>
+      <hr style="margin:2em 0;border:0;border-top:1.5px solid #eee;">
+      <h2 class="accent-text" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Admition Counseling (Marathi)</h2>
+      <p style="color:#222;margin-bottom:1.2em;">रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
+      <a href="/admition-counseling/" class="btn" style="margin-bottom:1.5em;">Start Counseling</a>
+      <hr style="margin:2em 0;border:0;border-top:1.5px solid #eee;">
+      <h2 class="accent-text" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Latest News</h2>
+      <p style="color:#222;margin-bottom:1.2em;">Stay updated with the latest news, trends, and tips in education and admissions.</p>
+      <a href="/news/" class="btn">View News</a>
     </div>
   </section>
   <script>

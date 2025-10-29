@@ -488,8 +488,8 @@ def signup_view(request):
         if User.objects.filter(username=email).exists():
             return render(request, 'signup.html', {'error':'This email is already registered. Please sign in or use another email.'})
         user = User.objects.create_user(username=email, email=email, password=pwd)
-        login(request, user)
-        return redirect('home')
+    login(request, user)
+    return redirect('profile')
     return render(request, 'signup.html')
 
 def login_view(request):
@@ -501,7 +501,7 @@ def login_view(request):
             login(request, user)
             # respect 'next' param when present
             next_url = request.POST.get('next') or request.GET.get('next')
-            return redirect(next_url) if next_url else redirect('home')
+            return redirect(next_url) if next_url else redirect('profile')
         return render(request, 'login.html', {'error':'Invalid credentials'})
     return render(request, 'login.html')
 
