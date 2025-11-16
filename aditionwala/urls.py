@@ -45,6 +45,8 @@ urlpatterns = [
     path('api/predict', views.api_predict),
     path('api/recommend', views.api_recommend),
     path('api/colleges-autocomplete/', views.colleges_autocomplete, name='colleges_autocomplete'),
+    path('api/send-otp/', views.api_send_otp, name='api_send_otp'),
+    path('api/verify-otp/', views.api_verify_otp, name='api_verify_otp'),
     path('api/', include(router.urls)),
     path('sitemap.xml', sitemap, {'sitemaps': {'static': StaticViewSitemap, 'colleges': CollegeSitemap}}, name='sitemap'),
     path('robots.txt', views.robots_txt, name='robots_txt'),

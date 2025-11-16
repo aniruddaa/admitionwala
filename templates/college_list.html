@@ -2,14 +2,14 @@
 {% load static %}
 
 {% block page_head %}
-  <title>Search Colleges - AdmitionWala</title>
-  <meta name="description" content="Browse detailed college profiles, compare courses and read reviews. Find the right college for your interest and location.">
+  <title>Search & Compare Colleges - AdmitionWala | Find Best Engineering, Medical & Arts Colleges</title>
+  <meta name="description" content="Search and compare 1000+ colleges by name, location, stream, and reviews. Find engineering colleges, medical colleges, MBA programs, and more. Get detailed profiles with courses, fees, and placement records.">
+  <meta name="keywords" content="colleges, college search, engineering colleges, medical colleges, MBA, college comparison, college reviews, courses, placement, college fees">
   <meta property="og:title" content="Search Colleges - AdmitionWala">
-  <meta property="og:description" content="Browse detailed college profiles, compare courses and read reviews. Find the right college for your interest and location.">
+  <meta property="og:description" content="Find and compare top colleges in India. Get detailed information about courses, fees, reviews and placements.">
   <meta property="og:image" content="{% static 'college_logo.svg' %}">
+  <meta property="og:type" content="website">
 {% endblock %}
-
-
 
 {% block site_header %}
 <header class="site-header">
@@ -27,20 +27,56 @@
 {% endblock %}
 
 {% block content %}
-  <h2 class="animated bounce accent-text" style="text-align:center;margin-bottom:24px;font-size:2em;">Find Colleges</h2>
-  <form method="get" class="animated fadeInUp panel" style="max-width:500px;margin:0 auto 24px auto;display:flex;gap:10px;align-items:center;">
-  <input name="q" placeholder="Search by name or location" value="{{ request.GET.q }}" class="input-accent" style="flex:1;" />
-  <button type="submit" class="accent-btn" style="padding:10px 22px;">Search</button>
-  </form>
-  <div class="animated fadeInUp" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;max-width:900px;margin:0 auto;">
-    {% for college in colleges %}
-  <div class="card" style="display:flex;flex-direction:column;align-items:flex-start;">
-  <div class="accent-text" style="font-size:1.1em;font-weight:700;margin-bottom:6px;">{{ college.name }}</div>
-    <div style="color:#9aa;margin-bottom:12px;">{{ college.location }}</div>
-  <a href="/college/{{ college.id }}/" class="accent-btn" style="margin-top:auto;color:#fff;padding:7px 16px;">View Details</a>
-      </div>
-    {% empty %}
-      <div style="grid-column:1/-1;text-align:center;color:#888;font-size:1.1em;">No colleges found.</div>
-    {% endfor %}
+  <div class="college-list-container">
+    <!-- College Hero Image -->
+    <div class="college-hero-image" style="margin-bottom:40px;">
+      <img src="{% static 'images/college-hero.jpg' %}" alt="College Campus and Education" loading="lazy">
+    </div>
+
+    <h1 style="text-align:center;margin-bottom:12px;font-size:2.2em;">Search & Compare Colleges</h1>
+    <p style="text-align:center;margin-bottom:24px;font-size:1.05em;">Find the best colleges across India. Compare courses, fees, and placements.</p>
+    
+    <form method="get" style="max-width:700px;margin:0 auto 32px auto;display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;">
+      <input name="q" placeholder="Search by college name, location, or stream..." value="{{ request.GET.q }}" style="flex:1;min-width:250px;padding:12px;border:2px solid #ddd;border-radius:8px;font-size:1em;" />
+      <button type="submit" class="accent-btn" style="padding:12px 24px;font-weight:700;white-space:nowrap;">Search</button>
+    </form>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:24px;margin-top:24px;">
+      {% for college in colleges %}
+        <div class="college-card">
+          {% if college.logo %}
+            <img src="{{ college.logo.url }}" alt="{{ college.name }}" style="width:100%;height:160px;object-fit:cover;border-radius:8px;margin-bottom:16px;" />
+          {% endif %}
+          <h3 style="margin-top:0;font-size:1.3em;">{{ college.name }}</h3>
+          <p><strong>📍 Location:</strong> {{ college.location }}</p>
+          {% if college.description %}
+            <p style="margin:8px 0;line-height:1.5;">{{ college.description|truncatewords:25 }}</p>
+          {% endif %}
+          <div style="display:flex;gap:8px;margin-top:16px;">
+            <a href="/college/{{ college.id }}/" class="accent-btn" style="display:inline-block;">View Details</a>
+          </div>
+        </div>
+      {% empty %}
+        <div style="grid-column:1/-1;text-align:center;padding:40px 20px;background:rgba(200,200,200,0.2);border-radius:12px;">
+          <p style="font-size:1.2em;color:#666;">📚 No colleges found matching your search.</p>
+          <p style="font-size:0.95em;color:#888;margin-top:10px;">Try searching with different keywords or location.</p>
+        </div>
+      {% endfor %}
+    </div>
   </div>
+
+  <!-- Schema Markup for SEO -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": "College Search & Comparison",
+    "description": "Search and compare colleges in India",
+    "url": "https://admitionwala.com/colleges/",
+    "mainEntity": {
+      "@type": "SearchAction",
+      "target": "https://admitionwala.com/colleges/?q={search_term}"
+    }
+  }
+  </script>
 {% endblock %}

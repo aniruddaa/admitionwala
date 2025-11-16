@@ -1,5 +1,7 @@
 from django.db import models  # type: ignore
 from django.contrib.auth.models import User  # type: ignore
+from django.utils import timezone
+from datetime import timedelta
 
 class CounselingSession(models.Model):
     name = models.CharField(max_length=100)
@@ -37,6 +39,7 @@ class Course(models.Model):
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     phone = models.CharField(max_length=20, blank=True)
+    mobile = models.CharField(max_length=20, blank=True, null=True)  # For OTP authentication
     interested_streams = models.CharField(max_length=200, blank=True)
     def __str__(self): return self.user.username
 
@@ -152,3 +155,81 @@ class StaffMember(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class OTPToken(models.Model):
+    """Store OTP tokens for user authentication via Email or SMS"""
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='otp_token')
+    code = models.CharField(max_length=6)
+    email = models.EmailField(blank=True)
+    mobile = models.CharField(max_length=15, blank=True)
+    delivery_method = models.CharField(max_length=10, choices=[('email', 'Email'), ('sms', 'SMS')], default='sms')
+    created_at = models.DateTimeField(auto_now_add=True)
+    expires_at = models.DateTimeField()
+    is_verified = models.BooleanField(default=False)
+    attempts = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"OTP for {self.user.email or self.user.username}"
+    
+    def is_expired(self):
+        """Check if OTP has expired"""
+        return timezone.now() > self.expires_at
+    
+    def verify_otp(self, code):
+        """Verify OTP code"""
+        # Check if OTP has expired
+        if self.is_expired():
+            return False, "OTP has expired"
+        
+        # Check if max attempts reached
+        if self.attempts >= 5:
+            return False, "Maximum attempts exceeded. Please request a new OTP."
+        
+        # Check if code matches
+        if self.code == code:
+            self.is_verified = True
+            self.save()
+            return True, "OTP verified successfully"
+        
+        # Increment attempts
+        self.attempts += 1
+        self.save()
+        return False, f"Invalid OTP. {5 - self.attempts} attempts remaining."
+    
+    @classmethod
+    def generate_otp(cls, user, email=None, mobile=None, delivery_method='sms'):
+        """Generate and send OTP via Email or SMS"""
+        from .otp_auth import send_otp_via_sms, send_otp_via_email
+        
+        # Create 6-digit OTP
+        code = ''.join(__import__('random').choices(__import__('string').digits, k=6))
+        
+        # Expire after 10 minutes
+        expires_at = timezone.now() + timedelta(minutes=10)
+        
+        # Delete existing OTP
+        cls.objects.filter(user=user).delete()
+        
+        # Determine delivery method
+        if not delivery_method:
+            delivery_method = 'sms' if mobile else 'email'
+        
+        # Create new OTP
+        otp = cls.objects.create(
+            user=user,
+            code=code,
+            email=email or '',
+            mobile=mobile or '',
+            delivery_method=delivery_method,
+            expires_at=expires_at
+        )
+        
+        # Send OTP based on delivery method
+        if delivery_method == 'sms' and mobile:
+            send_otp_via_sms(mobile, code)
+        elif delivery_method == 'email' and email:
+            send_otp_via_email(user, email, code)
+        
+        return otp
+

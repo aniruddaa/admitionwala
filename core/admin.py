@@ -1,5 +1,5 @@
 from django.contrib import admin  # type: ignore
-from .models import College, Course, Review, CounselingRequest, News, UserProfile, CertifiedCourse, JobInCareer  # type: ignore
+from .models import College, Course, Review, CounselingRequest, News, UserProfile, CertifiedCourse, JobInCareer, OTPToken  # type: ignore
 from .models import JobApplication  # type: ignore
 
 
@@ -22,6 +22,7 @@ admin.site.register(Review)
 admin.site.register(CounselingRequest)
 admin.site.register(News)
 admin.site.register(UserProfile)
+admin.site.register(OTPToken)
 admin.site.register(CertifiedCourse)
 admin.site.register(JobInCareer)
 from .models import Job  # type: ignore

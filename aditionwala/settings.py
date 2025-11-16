@@ -72,3 +72,42 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 CSRF_TRUSTED_ORIGINS = [
     'https://admitionwala-main-a9f0d24.kuberns.cloud'
 ]
+
+# ============================================================================
+# SMS SERVICE CONFIGURATION
+# ============================================================================
+# Choose SMS service: 'mock', 'fast2sms', 'twilio', 'aws_sns'
+SMS_SERVICE = os.getenv('SMS_SERVICE', 'mock')
+
+# Fast2SMS Configuration (India)
+# Get API key from: https://www.fast2sms.com/
+FAST2SMS_API_KEY = os.getenv('FAST2SMS_API_KEY', None)
+
+# Twilio Configuration (Global)
+# Get credentials from: https://www.twilio.com/
+TWILIO_ACCOUNT_SID = os.getenv('TWILIO_ACCOUNT_SID', None)
+TWILIO_AUTH_TOKEN = os.getenv('TWILIO_AUTH_TOKEN', None)
+TWILIO_FROM_NUMBER = os.getenv('TWILIO_FROM_NUMBER', None)
+
+# AWS SNS Configuration (Global)
+# Get credentials from: https://aws.amazon.com/
+AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
+AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
+AWS_SNS_REGION = os.getenv('AWS_SNS_REGION', 'us-east-1')
+
+# OTP Configuration
+OTP_EXPIRY_MINUTES = int(os.getenv('OTP_EXPIRY_MINUTES', '10'))
+OTP_MAX_ATTEMPTS = int(os.getenv('OTP_MAX_ATTEMPTS', '5'))
+OTP_CODE_LENGTH = int(os.getenv('OTP_CODE_LENGTH', '6'))
+
+# ============================================================================
+# EMAIL CONFIGURATION (for email-based OTP)
+# ============================================================================
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_HOST = os.getenv('EMAIL_HOST', 'smtp.gmail.com')
+EMAIL_PORT = int(os.getenv('EMAIL_PORT', '587'))
+EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@admitionwala.com')
+

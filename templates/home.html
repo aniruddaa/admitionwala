@@ -2,46 +2,110 @@
 {% load static %}
 
 {% block page_head %}
-  <title>Find Colleges & Apply - AdmitionWala</title>
-  <meta name="description" content="Search 1000+ colleges by name, location or stream. Get recommendations, reviews, and apply through one form.">
+  <title>Find Colleges & Apply - AdmitionWala | Best Education Platform India</title>
+  <meta name="description" content="Search 1000+ colleges by name, location or stream. Get personalized recommendations, reviews, and apply through one form. AdmitionWala - Your gateway to quality education.">
+  <meta name="keywords" content="colleges, education, admissions, counseling, engineering colleges, medical colleges, MBA, stream selection, college recommendations">
   <meta property="og:title" content="Find Colleges & Apply - AdmitionWala">
   <meta property="og:description" content="Search 1000+ colleges by name, location or stream. Get recommendations, reviews, and apply through one form.">
   <meta property="og:image" content="{% static 'college_logo.svg' %}">  
 {% endblock %}
 
 {% block content %}
-  <section class="home-hero-panel" style="max-width:900px;margin:48px auto 0 auto;background:rgba(255,255,255,0.92);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:40px 32px;position:relative;overflow:hidden;">
+  <!-- Hero Section -->
+  <section class="home-hero-panel animated slideInUp" style="max-width:900px;margin:48px auto 0 auto;background:rgba(255,255,255,0.92);border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:40px 32px;position:relative;overflow:hidden;">
     <div class="home-bg-image" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.35;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80') center/cover no-repeat;"></div>
     <div style="position:relative;z-index:1;">
-      <h2 class="accent-text" style="font-size:2.2em;font-weight:900;margin-bottom:0.6em;color:#222;background:#fff;padding:0.2em 0.6em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Find Your College</h2>
-      <p style="font-size:1.15em;color:#222;margin-bottom:1.2em;">Search 1000+ colleges by name, location, or stream. Get details, reviews, and more.</p>
-      <a href="/colleges/" class="btn" style="margin-bottom:1.5em;">Search Colleges</a>
+      <h1 class="accent-text animated slideInDown" style="font-size:2.2em;font-weight:900;margin-bottom:0.6em;color:#222;background:#fff;padding:0.2em 0.6em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Find Your College</h1>
+      <p class="animated slideInUp" style="font-size:1.15em;color:#222;margin-bottom:1.2em;animation-delay:0.2s;">Search 1000+ colleges by name, location, or stream. Get detailed information, student reviews, and more to make the best decision for your future.</p>
+      <a href="/colleges/" class="btn animated glow" style="margin-bottom:1.5em;animation-delay:0.4s;">Search Colleges</a>
       <hr style="margin:2em 0;border:0;border-top:1.5px solid #eee;">
-      <h2 class="accent-text" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Admition Counseling (Marathi)</h2>
-      <p style="color:#222;margin-bottom:1.2em;">रॉबो काउंसलरशी बोला आणि आपली माहिती द्या. Receive guidance in Marathi from our AI assistant.</p>
-      <a href="/admition-counseling/" class="btn" style="margin-bottom:1.5em;">Start Counseling</a>
+      
+      <h2 class="accent-text animated slideInDown" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation-delay:0.3s;">Expert Counseling</h2>
+      <p class="animated slideInUp" style="color:#222;margin-bottom:1.2em;animation-delay:0.5s;">Get personalized guidance from our AI-powered counselor available in multiple languages. Speak with our robot advisor and receive recommendations tailored to your interests, budget, and location preferences.</p>
+      <a href="/admition-counseling/" class="btn animated glow" style="margin-bottom:1.5em;animation-delay:0.7s;">Start Counseling</a>
       <hr style="margin:2em 0;border:0;border-top:1.5px solid #eee;">
-      <h2 class="accent-text" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Latest News</h2>
-      <p style="color:#222;margin-bottom:1.2em;">Stay updated with the latest news, trends, and tips in education and admissions.</p>
-      <a href="/news/" class="btn">View News</a>
+      
+      <h2 class="accent-text animated slideInDown" style="font-size:1.6em;font-weight:800;margin-bottom:0.5em;color:#222;background:#fff;padding:0.15em 0.5em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);animation-delay:0.6s;">Career Opportunities</h2>
+      <p class="animated slideInUp" style="color:#222;margin-bottom:1.2em;animation-delay:0.8s;">Explore thousands of job openings, internships, and career paths. Get placement guidance and connect with leading companies across India.</p>
+      <a href="/careers/" class="btn animated glow" style="animation-delay:1s;">Browse Careers</a>
+      
+      <!-- Schema Markup for SEO -->
+      <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "AdmitionWala",
+        "description": "Your gateway to quality education and career opportunities",
+        "url": "https://admitionwala.com",
+        "logo": "{% static 'images/admitionwala_logo.svg' %}",
+        "sameAs": [
+          "https://www.facebook.com/admitionwala",
+          "https://www.twitter.com/admitionwala",
+          "https://www.instagram.com/admitionwala"
+        ],
+        "service": {
+          "@type": "Service",
+          "name": "College Recommendations",
+          "description": "AI-powered college recommendation system"
+        }
+      }
+      </script>
     </div>
   </section>
+  
+  <!-- Features Section -->
+  <section style="max-width:900px;margin:40px auto;padding:0 20px;">
+    <h2 style="text-align:center;color:#fff;font-size:2em;margin-bottom:30px;animation:slideInDown 0.6s ease;">Why Choose AdmitionWala?</h2>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px;">
+      <div class="panel animated slideInLeft" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;">
+        <h3 style="color:#2d6cdf;font-size:1.3em;margin-bottom:10px;">🎯 Personalized</h3>
+        <p style="color:#333;line-height:1.6;">Get college recommendations tailored to your interests, budget, and location preferences using our advanced AI algorithm.</p>
+      </div>
+      
+      <div class="panel animated slideInUp" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;animation-delay:0.1s;">
+        <h3 style="color:#ff7a2d;font-size:1.3em;margin-bottom:10px;">🗣️ AI Voice Counselor</h3>
+        <p style="color:#333;line-height:1.6;">Interact with our human-like AI counselor that speaks multiple languages and provides real-time guidance on admissions and careers.</p>
+      </div>
+      
+      <div class="panel animated slideInRight" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;animation-delay:0.2s;">
+        <h3 style="color:#10b981;font-size:1.3em;margin-bottom:10px;">📱 Easy Apply</h3>
+        <p style="color:#333;line-height:1.6;">Apply to multiple colleges with a single form. No more filling lengthy application forms for each college separately.</p>
+      </div>
+      
+      <div class="panel animated slideInLeft" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;animation-delay:0.3s;">
+        <h3 style="color:#f59e0b;font-size:1.3em;margin-bottom:10px;">⭐ Reviews & Ratings</h3>
+        <p style="color:#333;line-height:1.6;">Read authentic reviews and ratings from current students and alumni to make informed decisions.</p>
+      </div>
+      
+      <div class="panel animated slideInUp" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;animation-delay:0.4s;">
+        <h3 style="color:#8b5cf6;font-size:1.3em;margin-bottom:10px;">💼 Career Guidance</h3>
+        <p style="color:#333;line-height:1.6;">Get expert guidance on career paths, placement opportunities, and skill development from industry professionals.</p>
+      </div>
+      
+      <div class="panel animated slideInRight" style="background:rgba(255,255,255,0.9);padding:20px;border-radius:12px;box-shadow:0 4px 12px rgba(0,0,0,0.1);transition:all 0.3s ease;animation-delay:0.5s;">
+        <h3 style="color:#ef4444;font-size:1.3em;margin-bottom:10px;">🔐 Secure & Safe</h3>
+        <p style="color:#333;line-height:1.6;">Your data is safe with us. We use industry-standard security measures to protect your personal information.</p>
+      </div>
+    </div>
+  </section>
+
   <script>
-    // Marathi greeting on homepage
+    // Enhanced greeting with AI Voice
     function speakMarathi(msg) {
       if ('speechSynthesis' in window) {
-        var utter = new SpeechSynthesisUtterance(msg);
-        utter.rate = 0.95; utter.pitch = 0.7; utter.volume = 1;
-        utter.lang = 'mr-IN';
-        window.speechSynthesis.speak(utter);
+        AIVoice.speakMarathi(msg);
       }
     }
-    $(function() {
+    
+    document.addEventListener('DOMContentLoaded', function() {
       var isAuth = "{{ user.is_authenticated|yesno:'true,false' }}" === "true";
-      if (!isAuth) {
-        speakMarathi('नमस्कार, आपले स्वागत आहे! कृपया ॲडमिशन काउंसलिंगसाठी पुढे जा.');
+      if (!isAuth && !sessionStorage.getItem('home-greeted')) {
+        setTimeout(function() {
+          speakMarathi('नमस्कार! एडमिशनवालामध्ये आपले स्वागत आहे. आपल्या शिक्षणाचा सफर सुरू करा आज.');
+          sessionStorage.setItem('home-greeted', 'true');
+        }, 2000);
       }
-      $('.panel-row').addClass('animated fadeInUp');
     });
   </script>
 {% endblock %}

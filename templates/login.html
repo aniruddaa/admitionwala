@@ -17,23 +17,163 @@
 {% endblock %}
 
 {% block content %}
-  <section class="login-hero-panel" style="max-width:420px;margin:48px auto 0 auto;background:rgba(255,255,255,0.92);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:32px 18px;position:relative;overflow:hidden;">
+  <section class="login-hero-panel animated slideInUp" style="max-width:420px;margin:48px auto 0 auto;background:rgba(255,255,255,0.92);border-radius:18px;box-shadow:0 4px 24px rgba(0,0,0,0.10);padding:32px 18px;position:relative;overflow:hidden;">
     <div class="login-bg-image" style="position:absolute;top:0;left:0;width:100%;height:100%;z-index:0;opacity:0.32;background:url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80') center/cover no-repeat;"></div>
     <div style="position:relative;z-index:1;">
       <h2 class="accent-text" style="font-size:2em;font-weight:900;margin-bottom:10px;color:#222;background:#fff;padding:0.2em 0.6em;border-radius:8px;display:inline-block;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Sign In</h2>
       <div style="color:#444;font-size:1.1em;margin-bottom:18px;">Access your personalized dashboard and college recommendations</div>
       {% if error %}<p style="color:red;text-align:center;">{{ error }}</p>{% endif %}
-      <form method="post" class="animated fadeInUp login-form" style="display:flex;flex-direction:column;gap:14px;">
+      
+      <!-- Tab Selection -->
+      <div style="display:flex;gap:10px;margin-bottom:20px;border-bottom:2px solid #eee;">
+        <button class="auth-tab" data-tab="password" style="flex:1;padding:10px;border:none;background:none;font-weight:700;color:#2d6cdf;border-bottom:3px solid #2d6cdf;cursor:pointer;">Password</button>
+        <button class="auth-tab" data-tab="otp" style="flex:1;padding:10px;border:none;background:none;font-weight:600;color:#999;cursor:pointer;">OTP</button>
+      </div>
+      
+      <!-- Password Login Form -->
+      <form method="post" class="login-form animated slideInUp" id="password-form" style="display:flex;flex-direction:column;gap:14px;">
         {% csrf_token %}
-        <label for="email" style="font-weight:700;color:#222;">Email</label>
-        <input id="email" name="email" type="email" required class="input-accent" style="color:#222;background:#fff;border-radius:6px;padding:10px 8px;">
+        <label for="mobile" style="font-weight:700;color:#222;">Mobile Number</label>
+        <input id="mobile" name="mobile" type="tel" placeholder="Enter 10-digit mobile number" maxlength="10" required class="input-accent" style="color:#222;background:#fff;border-radius:6px;padding:10px 8px;" inputmode="numeric">
         <label for="password" style="font-weight:700;color:#222;">Password</label>
         <input id="password" name="password" type="password" required class="input-accent" style="color:#222;background:#fff;border-radius:6px;padding:10px 8px;">
-        <button type="submit" class="accent-btn" style="margin-top:12px;font-weight:700;font-size:1.1em;background:linear-gradient(90deg,#ff7a2d 0%,#2d6cdf 100%);color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);">Sign in</button>
+        <button type="submit" class="accent-btn animated glow" style="margin-top:12px;font-weight:700;font-size:1.1em;background:linear-gradient(90deg,#ff7a2d 0%,#2d6cdf 100%);color:#fff;border-radius:8px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border:none;padding:12px;cursor:pointer;">Sign in</button>
       </form>
+      
+      <!-- OTP Login Form (Hidden by default) -->
+      <form method="post" id="otp-form" style="display:none;flex-direction:column;gap:14px;">
+        {% csrf_token %}
+        <label for="otp-mobile" style="font-weight:700;color:#222;">Mobile Number</label>
+        <input id="otp-mobile" name="otp_mobile" type="tel" placeholder="Enter 10-digit mobile number" maxlength="10" required class="input-accent" style="color:#222;background:#fff;border-radius:6px;padding:10px 8px;" inputmode="numeric">
+        <button type="button" id="send-otp-btn" class="accent-btn" style="font-weight:700;font-size:1.1em;background:#10b981;color:#fff;border-radius:8px;border:none;padding:12px;cursor:pointer;">Send OTP</button>
+        
+        <div id="otp-input-section" style="display:none;margin-top:10px;">
+          <label for="otp-code" style="font-weight:700;color:#222;">Enter OTP Code</label>
+          <input id="otp-code" name="otp_code" type="text" placeholder="000000" maxlength="6" class="input-accent" style="color:#222;background:#fff;border-radius:6px;padding:10px 8px;font-size:1.5em;letter-spacing:8px;text-align:center;">
+          <button type="submit" class="accent-btn animated glow" style="margin-top:12px;font-weight:700;font-size:1.1em;background:linear-gradient(90deg,#ff7a2d 0%,#2d6cdf 100%);color:#fff;border-radius:8px;border:none;padding:12px;cursor:pointer;width:100%;">Verify OTP</button>
+        </div>
+      </form>
+      
       <div style="text-align:center;margin-top:18px;">
         <span style="color:#555;">Don't have an account?</span> <a href="/signup/" class="accent-text" style="font-weight:700;text-decoration:none;">Sign up</a>
       </div>
     </div>
   </section>
+  
+  <script>
+    // Mobile number input formatting
+    document.getElementById('mobile').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '').slice(0, 10);
+      e.target.value = value;
+    });
+    
+    document.getElementById('otp-mobile').addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\D/g, '').slice(0, 10);
+      e.target.value = value;
+    });
+    
+    // Tab switching
+    document.querySelectorAll('.auth-tab').forEach(tab => {
+      tab.addEventListener('click', function() {
+        const tabName = this.dataset.tab;
+        document.querySelectorAll('.auth-tab').forEach(t => {
+          t.style.color = '#999';
+          t.style.borderBottom = 'none';
+        });
+        this.style.color = '#2d6cdf';
+        this.style.borderBottom = '3px solid #2d6cdf';
+        
+        if (tabName === 'password') {
+          document.getElementById('password-form').style.display = 'flex';
+          document.getElementById('otp-form').style.display = 'none';
+        } else {
+          document.getElementById('password-form').style.display = 'none';
+          document.getElementById('otp-form').style.display = 'flex';
+        }
+      });
+    });
+    
+    // OTP functionality - Call API to send OTP
+    document.getElementById('send-otp-btn').addEventListener('click', async function() {
+      const mobile = document.getElementById('otp-mobile').value;
+      if (!mobile || mobile.length !== 10) {
+        alert('Please enter a valid 10-digit mobile number');
+        return;
+      }
+      
+      this.disabled = true;
+      this.style.opacity = '0.5';
+      
+      try {
+        // Call API to send OTP
+        const response = await fetch('/api/send-otp/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: JSON.stringify({ mobile: mobile })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          // Speak confirmation
+          if (typeof AIVoice !== 'undefined') {
+            AIVoice.speakEnglish(`One Time Password sent to your mobile number ${mobile}. Please check your SMS.`);
+          }
+          alert(`OTP sent to ${mobile}. Please check your SMS inbox. OTP is: ${data.otp}`);
+          document.getElementById('otp-input-section').style.display = 'block';
+        } else {
+          alert('Error: ' + (data.error || 'Failed to send OTP'));
+          this.disabled = false;
+          this.style.opacity = '1';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to send OTP: ' + error.message);
+        this.disabled = false;
+        this.style.opacity = '1';
+      }
+    });
+    
+    // OTP verification on form submit
+    document.getElementById('otp-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const mobile = document.getElementById('otp-mobile').value;
+      const otpCode = document.getElementById('otp-code').value;
+      
+      if (!otpCode || otpCode.length !== 6) {
+        alert('Please enter a valid 6-digit OTP');
+        return;
+      }
+      
+      try {
+        // Call API to verify OTP
+        const response = await fetch('/api/verify-otp/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          },
+          body: JSON.stringify({ mobile: mobile, otp_code: otpCode })
+        });
+        
+        const data = await response.json();
+        
+        if (response.ok && data.success) {
+          // OTP verified - now submit the hidden form with OTP credentials
+          const form = document.getElementById('otp-form');
+          form.innerHTML += '<input type="hidden" name="otp_verified" value="1">';
+          form.submit();
+        } else {
+          alert('Error: ' + (data.error || 'Invalid OTP'));
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        alert('Failed to verify OTP: ' + error.message);
+      }
+    });
+  </script>
 {% endblock %}

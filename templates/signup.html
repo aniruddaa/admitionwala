@@ -1,25 +1,80 @@
 {% extends 'base.html' %}
 
-
-
-
 {% block content %}
   <div class="signup-box" style="max-width:420px;margin:48px auto 0 auto;">
     <div class="animated bounce" style="text-align:center;margin-bottom:24px;">
       <h2 class="accent-text" style="font-size:2em;margin-bottom:6px;">Create Account</h2>
-      <div style="color:#555;font-size:1.1em;">Sign up to access personalized college recommendations and counseling</div>
+      <div style="color:#555;font-size:1.1em;">Sign up with mobile number and password</div>
     </div>
     {% if error %}<p style="color:red;text-align:center;">{{ error }}</p>{% endif %}
-    <form method="post" class="animated fadeInUp panel signup-form" style="background:rgba(255,255,255,0.92);box-shadow:0 2px 12px rgba(0,0,0,0.10);border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;gap:16px;">
+    <form method="post" class="animated slideInUp panel signup-form" style="background:rgba(255,255,255,0.92);box-shadow:0 2px 12px rgba(0,0,0,0.10);border-radius:16px;padding:32px 24px;display:flex;flex-direction:column;gap:16px;">
       {% csrf_token %}
-      <label for="email" style="font-weight:600;color:#222;">Email</label>
-      <input id="email" name="email" type="email" required class="input-accent" style="color:#222;background:#fff;">
-      <label for="password" style="font-weight:600;color:#222;">Password</label>
-      <input id="password" name="password" type="password" required class="input-accent" style="color:#222;background:#fff;">
-      <button type="submit" class="animated bounce accent-btn" style="margin-top:12px;">Create</button>
+      
+      <label for="email" style="font-weight:600;color:#222;">Email (Optional)</label>
+      <input id="email" name="email" type="email" class="input-accent" style="color:#222;background:#fff;" placeholder="your@email.com">
+      
+      <label for="mobile" style="font-weight:600;color:#222;">Mobile Number *</label>
+      <input id="mobile" name="mobile" type="tel" required class="input-accent" style="color:#222;background:#fff;" placeholder="Enter 10-digit mobile number" maxlength="10" pattern="[0-9]{10}">
+      <small style="color:#666;">Enter your 10-digit mobile number without country code</small>
+      
+      <label for="password" style="font-weight:600;color:#222;">Password *</label>
+      <input id="password" name="password" type="password" required class="input-accent" style="color:#222;background:#fff;" placeholder="Minimum 8 characters">
+      <small style="color:#666;">Password must be at least 8 characters long</small>
+      
+      <label for="password_confirm" style="font-weight:600;color:#222;">Confirm Password *</label>
+      <input id="password_confirm" name="password_confirm" type="password" required class="input-accent" style="color:#222;background:#fff;" placeholder="Re-enter password">
+      
+      <label style="font-weight:600;color:#222;display:flex;align-items:center;gap:8px;">
+        <input type="checkbox" id="terms" required style="width:18px;height:18px;cursor:pointer;">
+        <span>I agree to the Terms of Service and Privacy Policy</span>
+      </label>
+      
+      <button type="submit" class="animated bounce accent-btn" style="margin-top:12px;font-weight:700;font-size:1.1em;background:linear-gradient(90deg,#ff7a2d 0%,#2d6cdf 100%);color:#fff;border-radius:8px;border:none;padding:12px;cursor:pointer;">Create Account</button>
     </form>
     <div style="text-align:center;margin-top:18px;">
       <span style="color:#555;">Already have an account?</span> <a href="/login/" class="accent-text" style="font-weight:600;text-decoration:none;">Sign in</a>
     </div>
   </div>
+  
+  <script>
+    // Mobile number validation and formatting
+    const mobileInput = document.getElementById('mobile');
+    mobileInput.addEventListener('input', function() {
+      // Remove non-digits
+      this.value = this.value.replace(/[^0-9]/g, '');
+      // Limit to 10 digits
+      if (this.value.length > 10) {
+        this.value = this.value.slice(0, 10);
+      }
+    });
+    
+    // Password confirmation validation
+    const form = document.querySelector('.signup-form');
+    form.addEventListener('submit', function(e) {
+      const password = document.getElementById('password').value;
+      const confirm = document.getElementById('password_confirm').value;
+      const mobile = document.getElementById('mobile').value;
+      
+      if (mobile.length !== 10) {
+        e.preventDefault();
+        alert('Please enter a valid 10-digit mobile number!');
+        AIVoice.speakEnglish('Please enter a valid 10-digit mobile number.');
+        return false;
+      }
+      
+      if (password !== confirm) {
+        e.preventDefault();
+        alert('Passwords do not match!');
+        AIVoice.speakEnglish('Passwords do not match. Please try again.');
+        return false;
+      }
+      
+      if (password.length < 8) {
+        e.preventDefault();
+        alert('Password must be at least 8 characters long!');
+        AIVoice.speakEnglish('Password must be at least 8 characters long.');
+        return false;
+      }
+    });
+  </script>
 {% endblock %}

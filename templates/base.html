@@ -4,14 +4,64 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdmitionWala</title>
-  <meta name="description" content="Find colleges, courses and career guidance across India. Search, compare and apply with one form at AdmitionWala.">
+  <meta name="description" content="Find colleges, courses and career guidance across India. Search, compare and apply with one form at AdmitionWala. Expert counseling for admissions, placements, and career growth.">
+  <meta name="keywords" content="colleges, admissions, counseling, courses, career guidance, engineering, medical, MBA, India education">
+  <meta name="author" content="AdmitionWala Team">
+  <meta name="robots" content="index, follow">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="AdmitionWala - College Admissions & Career Guidance Platform">
+  <meta property="og:description" content="Find the best colleges and career opportunities in India with expert counseling. Apply to multiple colleges with one form.">
+  <meta property="og:image" content="{% static 'images/admitionwala_logo.svg' %}">
+  <meta property="og:url" content="https://admitionwala.com">
+  <meta property="twitter:card" content="summary_large_image">
+  <meta property="twitter:title" content="AdmitionWala">
+  <meta property="twitter:description" content="Expert College Admissions & Career Guidance">
+  <meta property="twitter:image" content="{% static 'images/admitionwala_logo.svg' %}">
+  
+  <link rel="canonical" href="https://admitionwala.com">
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/admitionwala_logo.svg' %}">
+  
+  <title>AdmitionWala - Find Colleges & Career Guidance</title>
   <link rel="stylesheet" href="{% static 'design.css' %}">
+  <link rel="stylesheet" href="{% static 'background.css' %}">
+  <style>
+    /* AI Counselor Button Styles */
+    .ai-counselor-btn {
+      position: fixed;
+      bottom: 80px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff7a2d, #2d6cdf);
+      color: white;
+      border: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      z-index: 50;
+      animation: float 3s ease-in-out infinite;
+      transition: all 0.3s ease;
+    }
+    
+    .ai-counselor-btn:hover {
+      transform: scale(1.1);
+      box-shadow: 0 8px 24px rgba(255, 122, 45, 0.3);
+    }
+    
+    .ai-counselor-btn.listening {
+      animation: pulse 0.8s ease-in-out infinite;
+    }
+  </style>
 </head>
 <body>
   <div class="bg-animated"></div>
   <div class="bg-page-image" style="position:fixed;top:0;left:0;width:100vw;height:100vh;z-index:-1;opacity:0.22;background:url('/static/images/college_bg.jpg') center/cover no-repeat;"></div>
-  <header class="header">
+  
+  <header class="header animated slideInDown">
     <div style="display:flex;align-items:center;gap:10px;">
       <a href="/" class="logo" style="display:flex;align-items:center;gap:10px;text-decoration:none;">
         <img src="{% static 'images/admitionwala_logo.svg' %}" alt="AdmitionWala" style="height:40px;width:auto;">
@@ -33,12 +83,94 @@
       <a href="/login/" class="btn">Login</a>
     </nav>
   </header>
+  
   <main>
     {% block content %}{% endblock %}
   </main>
+  
   <footer class="footer">
-    <span>&copy; 2025 AdmitionWala. All rights reserved.</span>
+    <span>&copy; 2025 AdmitionWala. All rights reserved. | <a href="/about/" style="color:#ff7a2d;text-decoration:none;">About</a> | <a href="/sitemap.xml" style="color:#ff7a2d;text-decoration:none;">Sitemap</a></span>
   </footer>
+  
+  <!-- AI Voice Counselor Button -->
+  <button class="ai-counselor-btn" id="ai-counselor-btn" title="Talk to AI Counselor" aria-label="AI Counselor">🤖</button>
+  
+  <!-- AI Voice Module -->
+  <script>
+    // AI Voice Counselor - Text to Speech Module
+    window.AIVoice = {
+        isSpeaking: false,
+        lang: 'en-US',
+        
+        speak: function(text, lang = 'en-US', rate = 0.95, pitch = 1.0) {
+            if (!('speechSynthesis' in window)) {
+                console.warn('Speech Synthesis not supported');
+                return;
+            }
+            
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = rate;
+            utterance.pitch = pitch;
+            utterance.volume = 0.9;
+            
+            utterance.onstart = function() {
+                window.AIVoice.isSpeaking = true;
+                document.getElementById('ai-counselor-btn').classList.add('listening');
+            };
+            
+            utterance.onend = function() {
+                window.AIVoice.isSpeaking = false;
+                document.getElementById('ai-counselor-btn').classList.remove('listening');
+            };
+            
+            utterance.onerror = function(event) {
+                console.error('Speech synthesis error:', event.error);
+                window.AIVoice.isSpeaking = false;
+                document.getElementById('ai-counselor-btn').classList.remove('listening');
+            };
+            
+            window.speechSynthesis.speak(utterance);
+        },
+        
+        speakMarathi: function(text) {
+            this.speak(text, 'mr-IN', 0.85, 0.8);
+        },
+        
+        speakHindi: function(text) {
+            this.speak(text, 'hi-IN', 0.85, 0.8);
+        },
+        
+        speakEnglish: function(text) {
+            this.speak(text, 'en-US', 0.95, 1.0);
+        },
+        
+        stop: function() {
+            window.speechSynthesis.cancel();
+            this.isSpeaking = false;
+            document.getElementById('ai-counselor-btn').classList.remove('listening');
+        }
+    };
+    
+    // Initialize AI Counselor button
+    document.getElementById('ai-counselor-btn').addEventListener('click', function() {
+        const counselingUrl = '/admition-counseling/';
+        window.location.href = counselingUrl;
+    });
+    
+    // Auto-greet new visitors (non-authenticated)
+    window.addEventListener('load', function() {
+        const isAuth = "{{ user.is_authenticated|yesno:'true,false' }}" === 'true';
+        if (!isAuth && !sessionStorage.getItem('greeted')) {
+            setTimeout(function() {
+                AIVoice.speakEnglish('Welcome to AdmitionWala! Your gateway to the best colleges and career opportunities in India. Click the robot button to start your counseling session.');
+                sessionStorage.setItem('greeted', 'true');
+            }, 1500);
+        }
+    });
+  </script>
+
   <script>
     // Mobile navbar toggle
     const toggleBtn = document.getElementById('toggle-btn');

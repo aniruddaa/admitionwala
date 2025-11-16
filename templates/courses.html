@@ -7,17 +7,25 @@
 {% comment %} header block already present; no-op {% endcomment %}
 
 {% block content %}
-  <div class="panel" style="max-width:1000px;margin:24px auto;">
-    <h2 class="accent-text">Courses</h2>
-    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px;margin-top:16px;">
+  <div class="courses-container">
+    <h2 style="font-size:2.2em;margin-bottom:12px;">Explore Courses</h2>
+    <p style="font-size:1.1em;margin-bottom:24px;">Discover courses from top colleges across India. Compare durations, streams, and career opportunities.</p>
+    
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px;margin-top:24px;">
       {% for course in courses %}
-      <div class="card">
-        <div style="font-weight:700">{{ course.name }}</div>
-        <div style="color:#9aa">Stream: {{ course.stream }} • {{ course.duration }}</div>
-        <div style="margin-top:8px;"><a href="/course/{{ course.id }}/" class="accent-btn">View</a></div>
+      <div class="course-card">
+        <h3 style="margin-top:0;">{{ course.name }}</h3>
+        <p><strong>Stream:</strong> {{ course.stream }}</p>
+        <p><strong>Duration:</strong> {{ course.duration }}</p>
+        {% if course.description %}
+        <p style="font-size:0.95em;">{{ course.description|truncatewords:20 }}</p>
+        {% endif %}
+        <div style="margin-top:16px;"><a href="/course/{{ course.id }}/" class="accent-btn" style="display:inline-block;">View Details</a></div>
       </div>
       {% empty %}
-      <div>No courses available.</div>
+      <div style="grid-column:1/-1;text-align:center;padding:40px 20px;">
+        <p style="font-size:1.2em;color:#666;">No courses available at this time.</p>
+      </div>
       {% endfor %}
     </div>
   </div>

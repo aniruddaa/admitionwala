@@ -62,7 +62,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 import random
 from .nake_ml import NakeMl
-from .models import Job, JobInCareer, Bookmark
+from .models import Job, JobInCareer, Bookmark, UserProfile
 
 
 def colleges_autocomplete(request):
@@ -481,28 +481,65 @@ def course_detail_view(request, course_id):
 
 def signup_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
-        pwd = request.POST.get('password')
-        if not email or not pwd:
-            return render(request, 'signup.html', {'error':'Provide email and password'})
+        email = request.POST.get('email', '').strip()
+        mobile = request.POST.get('mobile', '').strip()
+        pwd = request.POST.get('password', '').strip()
+        
+        # Mobile is required, email and password are required
+        if not mobile or not pwd:
+            return render(request, 'signup.html', {'error':'Mobile number and password are required'})
+        
+        # Email is optional - if not provided, use mobile as username
+        if not email:
+            email = f'{mobile}@mobile.admitionwala.com'
+        
         if User.objects.filter(username=email).exists():
-            return render(request, 'signup.html', {'error':'This email is already registered. Please sign in or use another email.'})
+            return render(request, 'signup.html', {'error':'This email/account is already registered. Please sign in or use another email.'})
+        
+        if UserProfile.objects.filter(mobile=mobile).exists():
+            return render(request, 'signup.html', {'error':'This mobile number is already registered. Please sign in or use another mobile number.'})
+        
         user = User.objects.create_user(username=email, email=email, password=pwd)
-    login(request, user)
-    return redirect('profile')
+        
+        # Create or update UserProfile with mobile number
+        UserProfile.objects.update_or_create(
+            user=user,
+            defaults={'mobile': mobile}
+        )
+        
+        login(request, user)
+        return redirect('profile')
     return render(request, 'signup.html')
 
 def login_view(request):
     if request.method == 'POST':
-        email = request.POST.get('email')
+        mobile = request.POST.get('mobile')
+        otp_mobile = request.POST.get('otp_mobile')
+        otp_code = request.POST.get('otp_code')
         pwd = request.POST.get('password')
-        user = authenticate(request, username=email, password=pwd)
-        if user:
-            login(request, user)
-            # respect 'next' param when present
-            next_url = request.POST.get('next') or request.GET.get('next')
-            return redirect(next_url) if next_url else redirect('profile')
-        return render(request, 'login.html', {'error':'Invalid credentials'})
+        
+        # Handle OTP-based login
+        if otp_mobile and otp_code:
+            from .otp_auth import verify_otp
+            user_profile = UserProfile.objects.filter(mobile=otp_mobile).first()
+            if user_profile and verify_otp(user_profile.user, otp_code):
+                login(request, user_profile.user)
+                next_url = request.POST.get('next') or request.GET.get('next')
+                return redirect(next_url) if next_url else redirect('profile')
+            return render(request, 'login.html', {'error':'Invalid OTP'})
+        
+        # Handle password-based login with mobile number
+        if mobile and pwd:
+            user_profile = UserProfile.objects.filter(mobile=mobile).first()
+            if user_profile:
+                user = user_profile.user
+                if user.check_password(pwd):
+                    login(request, user)
+                    next_url = request.POST.get('next') or request.GET.get('next')
+                    return redirect(next_url) if next_url else redirect('profile')
+            return render(request, 'login.html', {'error':'Invalid mobile number or password'})
+        
+        return render(request, 'login.html', {'error':'Please provide mobile number and password or OTP'})
     return render(request, 'login.html')
 
 
@@ -608,6 +645,88 @@ def profile(request):
     from .models import UserProfile
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     return render(request, 'profile.html', {'profile': profile})
+
+
+# OTP API Endpoints
+from django.views.decorators.csrf import csrf_exempt
+
+@csrf_exempt
+def api_send_otp(request):
+    """Send OTP to mobile number via SMS"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST method required'}, status=400)
+    
+    import json
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        mobile = data.get('mobile', '').strip()
+        
+        if not mobile or len(mobile) != 10 or not mobile.isdigit():
+            return JsonResponse({'error': 'Invalid mobile number. Use 10 digits.'}, status=400)
+        
+        from .otp_auth import OTPToken
+        
+        # Try to find user by mobile
+        user_profile = UserProfile.objects.filter(mobile=mobile).first()
+        if not user_profile:
+            return JsonResponse({'error': 'Mobile number not registered. Please sign up first.'}, status=404)
+        
+        user = user_profile.user
+        otp = OTPToken.generate_otp(user, mobile=mobile, delivery_method='sms')
+        
+        return JsonResponse({
+            'success': True,
+            'message': f'OTP sent to {mobile}',
+            'otp': otp.code  # For testing only - remove in production
+        })
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
+
+@csrf_exempt
+def api_verify_otp(request):
+    """Verify OTP code for mobile number"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'POST method required'}, status=400)
+    
+    import json
+    try:
+        data = json.loads(request.body.decode('utf-8'))
+        mobile = data.get('mobile', '').strip()
+        otp_code = data.get('otp_code', '').strip()
+        
+        if not mobile or len(mobile) != 10:
+            return JsonResponse({'error': 'Invalid mobile number'}, status=400)
+        
+        if not otp_code or len(otp_code) != 6:
+            return JsonResponse({'error': 'Invalid OTP code'}, status=400)
+        
+        from .otp_auth import OTPToken
+        
+        user_profile = UserProfile.objects.filter(mobile=mobile).first()
+        if not user_profile:
+            return JsonResponse({'error': 'Mobile number not found'}, status=404)
+        
+        user = user_profile.user
+        try:
+            otp_token = OTPToken.objects.get(user=user)
+            is_valid, message = otp_token.verify_otp(otp_code)
+            
+            if is_valid:
+                return JsonResponse({
+                    'success': True,
+                    'message': 'OTP verified successfully',
+                    'user_id': user.id
+                })
+            else:
+                return JsonResponse({'error': message}, status=400)
+        except OTPToken.DoesNotExist:
+            return JsonResponse({'error': 'No OTP found. Please request a new OTP.'}, status=404)
+    
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=500)
+
 
 # DRF viewsets
 from rest_framework import viewsets

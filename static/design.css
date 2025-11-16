@@ -1,23 +1,36 @@
-/* New modern CSS will be added here for the redesign. */
+/* Professional, Modern & Animated Design with AI Features */
 
 :root {
-  --primary: #2d6cdf;
-  --accent: #ff7a2d;
-  --bg-gradient: linear-gradient(135deg, #2d6cdf 0%, #ff7a2d 100%);
+  --primary: #2c3e50;
+  --accent: #3498db;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   --header-height: 64px;
   --footer-height: 56px;
   --nav-radius: 16px;
   --card-radius: 18px;
-  --shadow: 0 4px 24px rgba(0,0,0,0.10);
+  --shadow: 0 4px 24px rgba(0,0,0,0.15);
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
-  background: var(--bg-gradient);
+  font-family: 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   min-height: 100vh;
   color: #fff;
   overflow-x: hidden;
+  position: relative;
+  background-attachment: fixed;
+}
+
+main {
+  padding-bottom: 80px;
 }
 
 .header {
@@ -309,4 +322,365 @@ h2, h3, h1 {
   color: #222 !important;
   font-weight: 900 !important;
   text-shadow: 0 1px 2px rgba(255,255,255,0.12);
+}
+
+/* ============ ENHANCED ANIMATIONS ============ */
+
+/* Smooth entrance animations */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes zoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  }
+  50% {
+    box-shadow: 0 8px 32px rgba(255,122,45,0.25);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes rotateIn {
+  from {
+    opacity: 0;
+    transform: rotate(-10deg) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Apply animations to elements */
+.animated {
+  animation-duration: 0.6s;
+  animation-fill-mode: both;
+}
+
+.animated.fadeIn {
+  animation-name: fadeIn;
+}
+
+.animated.slideInDown {
+  animation-name: slideInDown;
+}
+
+.animated.slideInUp {
+  animation-name: slideInUp;
+  animation-delay: 0.1s;
+}
+
+.animated.slideInLeft {
+  animation-name: slideInLeft;
+}
+
+.animated.slideInRight {
+  animation-name: slideInRight;
+}
+
+.animated.zoomIn {
+  animation-name: zoomIn;
+}
+
+.animated.bounce {
+  animation-name: bounceIn;
+}
+
+.animated.rotateIn {
+  animation-name: rotateIn;
+}
+
+.animated.glow {
+  animation-name: glow;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+.animated.float {
+  animation-name: float;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+}
+
+.animated.pulse {
+  animation-name: pulse;
+  animation-duration: 2s;
+  animation-iteration-count: infinite;
+}
+
+/* Button hover effects */
+.btn, .accent-btn, .input-accent {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn:hover {
+  background: #fff;
+  color: var(--accent);
+  transform: scale(1.04);
+  box-shadow: 0 8px 32px rgba(255,122,45,0.3);
+}
+
+.accent-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(255,122,45,0.3);
+}
+
+.input-accent:focus {
+  outline: none;
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 12px rgba(255,122,45,0.2);
+  transform: scale(1.02);
+}
+
+/* Card hover effects */
+.panel, .card, .hero {
+  transition: all 0.3s ease;
+}
+
+.panel:hover, .card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.hero:hover {
+  box-shadow: 0 12px 40px rgba(255,122,45,0.2);
+}
+
+/* Navigation hover effects */
+.navbar a {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.navbar a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+.navbar a:hover::after {
+  width: 100%;
+}
+
+/* Loading state animation */
+.loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--accent);
+  animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Form animations */
+.login-form, .signup-form {
+  animation: slideInUp 0.6s ease;
+}
+
+/* Header animation */
+.header {
+  animation: slideInDown 0.5s ease;
+}
+
+/* Responsive Design */
+@media (max-width: 900px) {
+  .hero { max-width: 98vw; }
+  .navbar { gap: 2vw; }
+}
+@media (max-width: 600px) {
+  body {
+    font-size: 1.08em;
+    background: linear-gradient(135deg, #ff7a2d 0%, #2d6cdf 100%);
+  }
+  .header {
+    flex-direction: column;
+    height: auto;
+    padding: 10px 8px;
+    box-shadow: none;
+  }
+  .logo {
+    font-size: 1.2em;
+    gap: 6px;
+  }
+  .navbar {
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    margin-top: 8px;
+  }
+  .navbar a, .btn {
+    width: 100%;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+  }
+  .hero {
+    padding: 12px 4px;
+    min-height: 220px;
+    font-size: 1em;
+    max-width: 99vw;
+    margin: 12px auto;
+    border-radius: 12px;
+  }
+  .footer {
+    font-size: 0.95em;
+    padding: 8px 0;
+    height: auto;
+    position: static;
+  }
+  .home-hero-panel {
+    max-width: 99vw !important;
+    margin: 16px auto 0 auto !important;
+    padding: 18px 6px !important;
+    border-radius: 12px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  }
+  .home-hero-panel h2.accent-text {
+    font-size: 1.3em !important;
+    padding: 0.12em 0.3em !important;
+    margin-bottom: 0.5em !important;
+    border-radius: 6px !important;
+  }
+  .home-hero-panel p {
+    font-size: 1em !important;
+    margin-bottom: 1em !important;
+  }
+  .home-hero-panel .btn {
+    width: 100%;
+    margin-bottom: 1em !important;
+    font-size: 1.1em !important;
+    padding: 12px 0 !important;
+    display: block;
+  }
+  .home-hero-panel hr {
+    margin: 1.2em 0 !important;
+  }
+  .login-hero-panel {
+    max-width: 98vw !important;
+    margin: 16px auto 0 auto !important;
+    padding: 16px 4px !important;
+    border-radius: 10px !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
+  }
+  .login-hero-panel h2.accent-text {
+    font-size: 1.3em !important;
+    padding: 0.12em 0.3em !important;
+    margin-bottom: 0.5em !important;
+    border-radius: 6px !important;
+  }
+  .login-hero-panel form {
+    gap: 10px !important;
+  }
+  .login-hero-panel .accent-btn {
+    width: 100%;
+    margin-bottom: 1em !important;
+    font-size: 1.1em !important;
+    padding: 12px 0 !important;
+    display: block;
+  }
 }
